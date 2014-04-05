@@ -1,0 +1,87 @@
+#include <stdio.h>
+#include "../modeloClustering/Input.h"
+#include "../modeloClustering/Parseador.h"
+#include "../modeloClustering/Vectorizador.h"
+#include "../comun/Utils.h"
+#include "../modeloClustering/Listador.h"
+
+int main(int argc, char **argv) {
+	Input input(argc, argv);
+	
+	switch (input.getFuncion()) {
+		case CLUSTERING: {
+			//Parser
+			std::cout << "realiza clustering y clasificacion\n";
+			std::cout << getTime() << std::endl;
+			/*std::cout << "repositorio: " << input.getParametro('d') << "\n";
+			std::cout << "valor k: " << input.getParametro('c') << "\n";
+			std::cout << "multigrupo: " << input.getParametro('o') << "\n";*/
+			// parsea todos los documentos de la coleccion contenidos en el directorio
+			Parseador * p = new Parseador("./config/stopwords.config", input.getParametro('d'));
+	        p->runParseador("salidaParseador", "./config/parseador.config");
+			unsigned cantidadArchivos = p->getCantidadArchivos();
+			delete (p);
+			std::cout << getTime() << std::endl;
+			
+			//Vectorizador
+			std::string path(crearCarpeta("salidaVectorizador"));
+			// archivos parseados
+			std::list<std::string> archivos;
+			recolectarRutasArch(path, ".psr", archivos);			
+			// archivo con las frecuencias globales
+			std::list<std::string> archivoGlobal;
+			recolectarRutasArch(path, ".config", archivoGlobal);
+			// ver como definimos las cotas
+			Vectorizador * v = new Vectorizador((*archivoGlobal.begin()), 1, (unsigned)(cantidadArchivos * 0,80), cantidadArchivos);
+			// vectorizo los documentos .psr alojados en el path de salida del parseador
+			std::list<std::string>::iterator it = archivos.begin();
+			while (it != archivos.end()) {
+				std::cout << (*it) << std::endl;
+				v->vectorizarDoc(*it);
+				++it;
+			}
+			delete(v);
+			
+			std::cout << getTime() << std::endl;
+			
+			//K-Means
+			std::cout << "Kmeans\n";
+			std::string path(crearCarpeta("salidaKmeans"));
+			// archivos vectores
+			std::list<std::string> vectores;
+			recolectarRutasArch(path, ".vec", vectores);			
+			KMeans* kmeans = new KMeans(vectores,input.getParametro(c));
+			kmeans->inicializarCentroides();
+			kmeans->clasificar();
+			std::cout << kmeans->toString() << std::endl;
+			delete(kmeans);
+			std::cout << "Kmeans fin\n";
+			std::cout << getTime() << std::endl;
+			
+		} break;
+		case LISTADOC: {
+			std::cout << "lista documentos y grupo al que pertenese\n";
+			std::cout << "vacio: " << input.getParametro('l') << "\n";
+			Listador * miListador = new Listador("./clusteringCorto.dat");
+			miListador->imprimirRelacion(0);
+			delete (miListador);
+		} break;
+		case LISTAGRUP: {
+			std::cout << "lista los grupos y sus documentos\n";
+			std::cout << "vacio: " << input.getParametro('g') << "\n";
+			Listador * miListador = new Listador("./clusteringCorto.dat");
+			miListador->imprimirRelacion(1);
+			delete (miListador);
+		} break;
+		case AGREGADOC:
+			std::cout << "agrega documento a la clasificacion\n";
+			std::cout << "documento: " << input.getParametro('a') << "\n";
+			break;
+		case ERROR:
+			std::cout << "parametros incorrectos\n";
+			std::cout << "vacio: " << input.getParametro('t') << "\n";
+			break;
+	}
+	
+	return 0;
+}
