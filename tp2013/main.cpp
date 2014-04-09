@@ -1,9 +1,9 @@
 #include <stdio.h>
 //#include "../modeloClustering/Input.h"
 
-
+/*
 int main(int argc, char **argv) {
-/*	Input input(argc, argv);
+	Input input(argc, argv);
 	
 	switch (input.getFuncion()) {
 		case CLUSTERING: {
@@ -31,6 +31,7 @@ int main(int argc, char **argv) {
 			std::cout << "vacio: " << input.getParametro('t') << "\n";
 			break;
 	}
-*/	
+	
 	return 0;
 }
+*/
