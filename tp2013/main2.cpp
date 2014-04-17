@@ -1,9 +1,15 @@
 #include <stdio.h>
 //#include "../modeloClustering/Input.h"
 
+<<<<<<< HEAD:tp2013/main.cpp
 /*
 int main(int argc, char **argv) {
 	Input input(argc, argv);
+=======
+
+int main2(int argc, char **argv) {
+/*	Input input(argc, argv);
+>>>>>>> 4b4ea6d7af934e1b5cd950f930256e8ff4e2c734:tp2013/main2.cpp
 	
 	switch (input.getFuncion()) {
 		case CLUSTERING: {
