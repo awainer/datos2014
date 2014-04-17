@@ -54,7 +54,7 @@ void print_stats(int v[MAX_BLOCK_COUNT][256]) {
 
 int main() {
 
-	string DATAPATH = "/home/ari/canterbury/canterbury.tar";
+	string DATAPATH = "/home/freakazoid/Downloads/canterbury.tar";
 	char buffer[BLOCKSIZE];
 	int counts[MAX_BLOCK_COUNT][256];
 	int i, block_count;
