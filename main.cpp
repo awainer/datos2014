@@ -100,3 +100,9 @@ int main() {
 	return 0;
 }
 */
+
+#include "MTF.h"
+int main(){
+return 0;
+}
+
