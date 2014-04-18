@@ -51,7 +51,7 @@ void print_stats(int v[MAX_BLOCK_COUNT][256]) {
 	 }
 	 cout << "total bytes: " << suma;*/
 }
-
+/*
 int main() {
 
 	string DATAPATH = "/home/freakazoid/Downloads/canterbury.tar";
@@ -99,4 +99,4 @@ int main() {
 	cout << "Fin" << endl;
 	return 0;
 }
-
+*/
