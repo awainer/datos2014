@@ -5,12 +5,6 @@
  *      Author: ari
  */
 
-//#include <iostream>
-#include <string>
-#include <fstream>
-#include <stdlib.h>
-#include <sys/stat.h>
-
 using namespace std;
 
 

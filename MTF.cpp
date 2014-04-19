@@ -6,7 +6,7 @@
  */
 
 #include "MTF.h"
-#include <algorithm>
+#include <iostream>
 #include <memory.h>
 
 namespace std {
@@ -73,10 +73,7 @@ unsigned char MTF::get_current_position(unsigned char c){
 }
 
 
-/**
- * Algoritmo B (Move-to-front)
- */
-unsigned char * MTF::b(unsigned long int blockLenght,unsigned char * blockData){
+unsigned char * MTF::encode(unsigned long int blockLenght,unsigned char * blockData){
 
 	unsigned long int resultpos=0;
 	unsigned char * result = NULL;
@@ -92,7 +89,28 @@ unsigned char * MTF::b(unsigned long int blockLenght,unsigned char * blockData){
 		resultpos++;
 	}
 	return result;
+}
 
+unsigned char * MTF::decode(unsigned long int blockLenght,unsigned char * blockData){
+	unsigned long int resultpos=0;
+	unsigned char * result = NULL;
+	this->resetStatus();
+
+	if(!blockLenght)
+		return result;
+	result =(unsigned char *) malloc(blockLenght);
+	for (unsigned long int i=0;i<blockLenght;i++){
+		result[resultpos] = this->get_element_at(blockData[i]);
+		this->updateStatus(blockData[i]);
+		resultpos++;
+	}
+	return result;
+}
+
+unsigned char  MTF::get_element_at(unsigned short int position){
+	list<unsigned short int>::iterator it = this->symbol_status.begin();
+	advance(it,position);
+	return *it;
 }
 
 MTF::~MTF() {

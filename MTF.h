@@ -16,11 +16,13 @@ class MTF {
 public:
 	MTF();
 	virtual ~MTF();
-	unsigned char * b(unsigned long int blockLenght,unsigned char * blockData);
+	unsigned char * encode(unsigned long int blockLenght,unsigned char * blockData);
+	unsigned char * decode(unsigned long int blockLenght,unsigned char * blockData);
 private:
 	void resetStatus();
 	void updateStatus(unsigned char);
 	unsigned char get_current_position(unsigned char);
+	unsigned char get_element_at(unsigned short int postition);
 
 	unsigned short int initial_vector[256];
 
