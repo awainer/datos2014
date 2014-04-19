@@ -76,12 +76,16 @@ unsigned char MTF::get_current_position(unsigned char c){
 /**
  * Algoritmo B (Move-to-front)
  */
-unsigned char * MTF::b(unsigned long int blockLenght,char * blockData){
+unsigned char * MTF::b(unsigned long int blockLenght,unsigned char * blockData){
+
+	unsigned long int resultpos=0;
+	unsigned char * result = NULL;
 	this->resetStatus();
 
-	unsigned char * result =(unsigned char *) malloc(blockLenght);
-	unsigned long int resultpos=0;
+	if(!blockLenght)
+		return result;
 
+	result =(unsigned char *) malloc(blockLenght);
 	for (unsigned long int i=0;i<blockLenght;i++){
 		result[resultpos] = this->get_current_position(blockData[i]);
 		this->updateStatus(result[resultpos]);

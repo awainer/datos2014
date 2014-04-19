@@ -10,10 +10,10 @@
 
 
 namespace std{
-TEST(MTFTest, unTest) {
+TEST(MTFTest, caaaaxcha) {
 	MTF * miTrans = new MTF();
-	char  miBloque[] = {'C','A','A','A','X','C','H','A'};
-	char  bloqueMovido[] = {59,61,1,0,38,3,55,0};
+	unsigned char  miBloque[] = {'C','A','A','A','X','C','H','A'};
+	unsigned char  bloqueMovido[] = {59,61,1,0,38,3,55,0};
 	int tamanio =  sizeof(miBloque);
 	unsigned char * r = miTrans->b(tamanio,miBloque);
 
@@ -24,5 +24,26 @@ TEST(MTFTest, unTest) {
 	}
 
 }
+
+TEST(MTFTest, unchar) {
+	MTF * miTrans = new MTF();
+	unsigned char  miBloque[] = {'a'};
+	int tamanio =  sizeof(miBloque);
+	unsigned char * r = miTrans->b(tamanio,miBloque);
+	ASSERT_EQ(*r,6);
+
 }
+
+TEST(MTFTest, vacio) {
+	MTF * miTrans = new MTF();
+	unsigned char  miBloque[] = {};
+	int tamanio =  sizeof(miBloque);
+	unsigned char * r = miTrans->b(tamanio,miBloque);
+	ASSERT_EQ(*r,*miBloque);
+
+}
+
+}
+
+
 

@@ -16,7 +16,7 @@ class MTF {
 public:
 	MTF();
 	virtual ~MTF();
-	unsigned char * b(unsigned long int blockLenght,char * blockData);
+	unsigned char * b(unsigned long int blockLenght,unsigned char * blockData);
 private:
 	void resetStatus();
 	void updateStatus(unsigned char);
