@@ -12,11 +12,13 @@
 namespace std{
 TEST(MTFTest, unTest) {
 	MTF * miTrans = new MTF();
-	char * miBloque = "CADORCHA";
-	cout << "test cadorcha" << endl;
+	 char  miBloque[] = {'C','A','D','O','R','C','H','A'};
+
+//	cout << "test cadorcha" << endl;
 	int tamanio =  8;
-	unsigned char * r = miTrans->b(tamanio,miBloque);
-	for (int i=0; i<tamanio; i++)
-		cout << (int)r[i] << endl;
+	//unsigned char * r = miTrans->b(tamanio,miBloque);
+	miTrans->b(tamanio,miBloque);
+//	for (int i=0; i<tamanio; i++)
+//		cout << (int)r[i] << endl;
 }
 }

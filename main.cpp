@@ -103,6 +103,15 @@ int main() {
 
 #include "MTF.h"
 int main(){
-return 0;
+	MTF * miTrans = new MTF();
+	char  miBloque[] = {'C','A','A','A','R','C','H','A'};
+
+	cout << "test cadorcha" << endl;
+	int tamanio =  sizeof(miBloque);
+	unsigned char * r = miTrans->b(tamanio,miBloque);
+	miTrans->b(tamanio,miBloque);
+	for (int i=0; i<tamanio; i++)
+		cout << (int)r[i] << endl;
+	return 0;
 }
 
