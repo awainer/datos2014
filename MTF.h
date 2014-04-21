@@ -21,8 +21,8 @@ public:
 private:
 	void resetStatus();
 	void updateStatus(unsigned char);
-	unsigned char get_current_position(unsigned char);
-	unsigned char get_element_at(unsigned short int postition);
+	unsigned char getCurrentPosition(unsigned char);
+	unsigned char getElementAt(unsigned short int postition);
 
 	unsigned short int initial_vector[256];
 

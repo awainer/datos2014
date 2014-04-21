@@ -59,7 +59,7 @@ void MTF::updateStatus(unsigned char lastpos){
 		this->symbol_status.insert(it,elem);
 	}
 }
-unsigned char MTF::get_current_position(unsigned char c){
+unsigned char MTF::getCurrentPosition(unsigned char c){
 
 	list<unsigned short int>::iterator it = this->symbol_status.begin();
 	char pos = 0;
@@ -84,7 +84,7 @@ unsigned char * MTF::encode(unsigned long int blockLenght,unsigned char * blockD
 
 	result =(unsigned char *) malloc(blockLenght);
 	for (unsigned long int i=0;i<blockLenght;i++){
-		result[resultpos] = this->get_current_position(blockData[i]);
+		result[resultpos] = this->getCurrentPosition(blockData[i]);
 		this->updateStatus(result[resultpos]);
 		resultpos++;
 	}
@@ -100,14 +100,14 @@ unsigned char * MTF::decode(unsigned long int blockLenght,unsigned char * blockD
 		return result;
 	result =(unsigned char *) malloc(blockLenght);
 	for (unsigned long int i=0;i<blockLenght;i++){
-		result[resultpos] = this->get_element_at(blockData[i]);
+		result[resultpos] = this->getElementAt(blockData[i]);
 		this->updateStatus(blockData[i]);
 		resultpos++;
 	}
 	return result;
 }
 
-unsigned char  MTF::get_element_at(unsigned short int position){
+unsigned char  MTF::getElementAt(unsigned short int position){
 	list<unsigned short int>::iterator it = this->symbol_status.begin();
 	advance(it,position);
 	return *it;
