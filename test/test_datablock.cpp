@@ -9,11 +9,9 @@
 #include "../DataBlock.h"
 namespace std{
 TEST(DataBlockTest,addbyte){
-	DataBlock * block = new DataBlock((unsigned char*)NULL, 0,0,0);
-	unsigned char  bytesToAdd[]="garompa";//{'g','a','r','o','m','p','a'};
-	unsigned char * ptr = bytesToAdd;
-	block->addBytes(ptr,7); // Deliberadamente omito el '\0'
-	ASSERT_EQ(block->getSizeInBytes(),7);
+	DataBlock * block = new DataBlock();
+	block->addByte(7);
+	ASSERT_EQ(block->getSizeInBytes(),1);
 }
 
 }
