@@ -23,55 +23,51 @@ DataBlock::DataBlock(){
 }
 
 void DataBlock::addByte(unsigned char data) {
-	unsigned char new_byte,aux,bits_to_add;
-
 	if(!this->remaining_bits_count){
 		this->data[this->data.size()-1] = data;
 		this->data.push_back(0);
 	}
 	else{
-		//optimizable, seguro.
-		bits_to_add =8 - this->remaining_bits_count;
-		aux = data >> (bits_to_add);
-		new_byte = this->data[this->data.size()-1] | aux;
-		this->data.push_back(new_byte);
-		this->data[this->data.size()-1] = data << bits_to_add;
-		this->remaining_bits_count = 8 - remaining_bits_count;
+		this->addBits(data,8);
 	}
-
 }
 
 void DataBlock::addBits(unsigned char data, unsigned char count) {
-	if (count>7)
-		throw "No se pueden agregar mas de 7 bits con este metodo, usa addByte.";
-		// No llega a formar byte
+	//if (count>7)
+	//	throw "No se pueden agregar mas de 7 bits con este metodo, usa addByte.";
+
 	//Enmascaro los bits que contienen información
 	data = data & this->masks[count-1];
+	// No se arma byte
 	if (this->remaining_bits_count + count < 8){
-		this->data[this->data.size()-1] =  (this->data[this->data.size()-1] << count) | data;
+		this->data[this->data.size()-1] =  this->data[this->data.size()-1] | data << (8 - (count +	this->remaining_bits_count));
 		this->remaining_bits_count+=count;
-	}else{
-		unsigned char new_byte=0;
-		//unsigned char bits_to_shift= this->remaining_bits_count + count - 8;
-		unsigned char bits_to_shift= 8 - this->remaining_bits_count;
-		//cerr << "shifting: " << (int)bits_to_shift <<endl;
-
-		this->data[this->data.size()-1] =  (this->data[this->data.size()-1] <<  bits_to_shift) | (data >> (count -  bits_to_shift));
-
-		new_byte = data | this->masks[bits_to_shift];
-		this->data.push_back(new_byte);
-		this->remaining_bits_count = (this->remaining_bits_count + count - 8);
-
+		return;
 	}
-
+	// Se arma byte
+	if (this->remaining_bits_count + count == 8){
+		this->data[this->data.size()-1] =  this->data[this->data.size()-1] | data;
+		this->data.push_back(0);
+		this->remaining_bits_count = 0;
+		return;
+	}
+	// Se arma byte y sobran unos bits
+	unsigned char new_byte=0;
+	unsigned short int bits_to_shift = count - (8 - this->remaining_bits_count);
+	this->data[this->data.size()-1] =  this->data[this->data.size()-1] | data >> bits_to_shift;
+	//Alineao a izquierda lo que sobra y lo guardo
+	new_byte = data << (8 - bits_to_shift);
+	this->data.push_back(new_byte);
+	this->remaining_bits_count = count - bits_to_shift;
 }
 
 
 
 unsigned long int DataBlock::getSizeInBytes() {
-	if(!this->remaining_bits_count)
+	if(this->remaining_bits_count == 0)
 		return this->data.size() - 1;
-	return this->data.size();
+	else
+		return this->data.size();
 }
 
 
