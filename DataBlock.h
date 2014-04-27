@@ -26,7 +26,8 @@ public:
 	virtual ~DataBlock();
 private:
 	vector<unsigned char> data;
-	unsigned char remaining_bits,remaining_bits_count;
+	unsigned char remaining_bits_count;
+	//vector<unsigned char>::iterator last;
 	char  masks[8];
 	//unsigned char masks[8];
 };
