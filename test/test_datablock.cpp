@@ -44,7 +44,30 @@ TEST(DataBlockTest,addbits){
 	ASSERT_EQ(*it,0x0F);
 }
 
+TEST(DataBlockTest,addbits2){
+	DataBlock * block = new DataBlock();
+	unsigned short int unos = 0xFF;
+	unsigned short int uno = 0x18;
+	block->addBits(unos,4);
+	block->addBits(uno,4);
+	//block->addByte(1);
+	vector<unsigned char>::iterator it = block->getIterator();
+	ASSERT_EQ(block->getSizeInBytes(),1);
+	ASSERT_EQ(*it,0xF8);
+}
 
+TEST(DataBlockTest,addbits3){
+	DataBlock * block = new DataBlock();
+	unsigned short int unos = 0xFF;
+	block->addBits(unos,7);
+	block->addBits((unsigned char)0x07,4);
+	//block->addByte(1);
+	vector<unsigned char>::iterator it = block->getIterator();
+	ASSERT_EQ(block->getSizeInBytes(),2);
+	ASSERT_EQ(*it,0xFE);
+	it++;
+	ASSERT_EQ(*it,0x1E);
+}
 }
 
 

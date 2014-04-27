@@ -52,10 +52,12 @@ void DataBlock::addBits(unsigned char data, unsigned char count) {
 		this->remaining_bits_count+=count;
 	}else{
 		unsigned char new_byte=0;
-		unsigned char bits_to_shift= this->remaining_bits_count + count - 8;
+		//unsigned char bits_to_shift= this->remaining_bits_count + count - 8;
+		unsigned char bits_to_shift= 8 - this->remaining_bits_count;
 		//cerr << "shifting: " << (int)bits_to_shift <<endl;
 
-		this->data[this->data.size()-1] =  (this->data[this->data.size()-1] << ( 8 - this->remaining_bits_count)) | (data >> bits_to_shift);
+		this->data[this->data.size()-1] =  (this->data[this->data.size()-1] <<  bits_to_shift) | (data >> (count -  bits_to_shift));
+
 		new_byte = data | this->masks[bits_to_shift];
 		this->data.push_back(new_byte);
 		this->remaining_bits_count = (this->remaining_bits_count + count - 8);
