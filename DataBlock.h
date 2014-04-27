@@ -10,10 +10,10 @@
 
 #include <cstdint>
 #include <vector>
+#include <array>
 namespace std {
 
 class DataBlock {
-	//const unsigned char masks ={1,3,7,15,31,63,127.255};
 public:
 	DataBlock();
 	//void addBytes(unsigned char * data, unsigned long int count);
@@ -22,11 +22,13 @@ public:
 	unsigned long int getSizeInBytes();
 	unsigned long int getSizeInBits();
 	char getRemainingBits();
-	unsigned char * getalignedData();
+	vector<unsigned char>::iterator getIterator();
 	virtual ~DataBlock();
 private:
 	vector<unsigned char> data;
 	unsigned char remaining_bits,remaining_bits_count;
+	char  masks[8];
+	//unsigned char masks[8];
 };
 
 } /* namespace std */

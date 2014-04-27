@@ -13,6 +13,11 @@ namespace std {
 DataBlock::DataBlock(){
 	this->remaining_bits=0;
 	this->remaining_bits_count=0;
+	// Si alguien encuentra una forma mas bonita de
+	// inicializar esto, mas que bienvenida.
+	unsigned char masks[] = {1,3,7,15,31,63,127,255};
+	for (int i=0;i<8;i++)
+		this->masks[i] = masks[i];
 }
 
 void DataBlock::addByte(unsigned char data) {
@@ -32,31 +37,41 @@ void DataBlock::addByte(unsigned char data) {
 }
 
 void DataBlock::addBits(unsigned char data, unsigned char count) {
-	//unsigned char aux;
+
 	if (count>7)
 		throw "No se pueden agregar mas de 7 bits con este metodo, usa addByte.";
-	if(!this->remaining_bits_count){
-		this->remaining_bits=data;
-		this->remaining_bits_count=count;
-	}/*else{
+		// No llega a formar byte
+	if (this->remaining_bits_count + count < 8){
+		this->remaining_bits = (this->remaining_bits << count) && data;
+		this->remaining_bits_count+=count;
+	}else{
+		unsigned char new_byte=0;
+		unsigned char bits_to_shift= this->remaining_bits_count + count - 8;
+		new_byte = this->remaining_bits << ( 8 - this->remaining_bits_count);
+		new_byte = new_byte && (data >> bits_to_shift);
+		this->data.push_back(new_byte);
+		this->remaining_bits = data && this->masks[bits_to_shift];
+		this->remaining_bits_count = (this->remaining_bits_count + count - 8);
 
-			unsigned char bits_to_complete = 8 - this->remaining_bits_count;
-			//TODO: hay que considerar los dos casos: en que se completa un byte
-			// y cuando sobran bits
-			//aux = (this->remaining_bits << bits_to_complete) && data ;
-
-		}*/
 	}
+
+}
 
 
 
 unsigned long int DataBlock::getSizeInBytes() {
-	return (this->data.size() + (this->remaining_bits_count % 8)); //magic!
+	if(this->remaining_bits)
+		return this->data.size() + 1;
+	return this->data.size();
 }
 
 
 unsigned long int DataBlock::getSizeInBits() {
 		return (8*this->data.size() + this->remaining_bits_count);
+}
+
+vector<unsigned char>::iterator DataBlock::getIterator(){
+	return this->data.begin();
 }
 
 DataBlock::~DataBlock() {
