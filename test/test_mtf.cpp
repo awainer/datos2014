@@ -70,7 +70,8 @@ TEST(MTFTest, vacio) {
 	unsigned char  miBloque[] = {};
 	int tamanio =  sizeof(miBloque);
 	unsigned char * r = miTrans->encode(tamanio,miBloque);
-	ASSERT_EQ(*r,*miBloque);
+	ASSERT_FALSE(r);
+	//ASSERT_EQ(*r,*miBloque);
 
 }
 
