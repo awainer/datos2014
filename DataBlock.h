@@ -15,7 +15,12 @@ namespace std {
 
 class DataBlock {
 public:
+
+
+
 	DataBlock();
+    //iterator begin();
+   // iterator end();
 	//void addBytes(unsigned char * data, unsigned long int count);
 	void addByte(unsigned char data);
 	void addBits(unsigned char data, unsigned char count);

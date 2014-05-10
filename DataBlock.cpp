@@ -80,7 +80,7 @@ vector<unsigned char>::iterator DataBlock::getIterator(){
 }
 
 DataBlock::~DataBlock() {
-	delete &(this->data);
+	//delete this->data;
 }
 
 } /* namespace std */

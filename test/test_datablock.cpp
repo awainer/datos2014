@@ -15,6 +15,7 @@ TEST(DataBlockTest,addbyte){
 	vector<unsigned char>::iterator it = block->getIterator();
 	ASSERT_EQ(block->getSizeInBytes(),1);
 	ASSERT_EQ(*it,7);
+	delete block;
 }
 
 TEST(DataBlockTest,buildbyte){
@@ -32,6 +33,7 @@ TEST(DataBlockTest,buildbyte){
 	vector<unsigned char>::iterator it = block->getIterator();
 	ASSERT_EQ(block->getSizeInBytes(),1);
 	ASSERT_EQ(*it,241);
+	delete block;
 }
 
 TEST(DataBlockTest,addbits){
@@ -42,6 +44,7 @@ TEST(DataBlockTest,addbits){
 	vector<unsigned char>::iterator it = block->getIterator();
 	ASSERT_EQ(block->getSizeInBytes(),1);
 	ASSERT_EQ(*it,0xF0);
+	delete block;
 }
 
 TEST(DataBlockTest,addbits2){
@@ -54,6 +57,7 @@ TEST(DataBlockTest,addbits2){
 	vector<unsigned char>::iterator it = block->getIterator();
 	ASSERT_EQ(block->getSizeInBytes(),1);
 	ASSERT_EQ(*it,0xF8);
+	delete block;
 }
 
 TEST(DataBlockTest,addBitsBytepico){
@@ -66,6 +70,7 @@ TEST(DataBlockTest,addBitsBytepico){
 	ASSERT_EQ(*it,0xFE);
 	it++;
 	ASSERT_EQ(*it,0xE0);
+	delete block;
 }
 
 TEST(DataBlockTest,bitsAndBytes){
@@ -77,6 +82,7 @@ TEST(DataBlockTest,bitsAndBytes){
 	ASSERT_EQ(*it,0x30);
 	it++;
 	ASSERT_EQ(*it,0x1C);
+	delete block;
 }
 }
 
