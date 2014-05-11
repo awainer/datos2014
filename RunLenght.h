@@ -16,7 +16,7 @@ public:
 	Run();
 	virtual ~Run();
 	unsigned char symbol;
-	unsigned char count; //Runs màximos de 256 + 4?
+	unsigned short int count; //Runs màximos de 256 + 4?
 };
 
 class RunLenght {
@@ -25,11 +25,14 @@ public:
 	virtual ~RunLenght();
 	DataBlock * encode(DataBlock * src);
 	DataBlock * decode(DataBlock * src);
+	unsigned int * getStats();
+	unsigned char getEscapeChar();
 private:
 	char escape = '$';
 	unsigned int stats[256];
 	Run getRun(vector<unsigned char >::iterator, unsigned long int);
 	void encodeRun(DataBlock * dst, Run r);
+	void resetStats();
 };
 
 

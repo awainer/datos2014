@@ -14,8 +14,20 @@
 namespace std {
 
 RunLenght::RunLenght() {
-	// TODO Auto-generated constructor stub
+	this->resetStats();
+}
 
+void RunLenght::resetStats() {
+	for(int i=0; i<256; i++)
+		this->stats[i] = 0;
+}
+
+unsigned int *  RunLenght::getStats(){
+	return this->stats;
+}
+
+unsigned char RunLenght::getEscapeChar(){
+	return this->escape;
 }
 
 RunLenght::~RunLenght() {
@@ -28,13 +40,13 @@ DataBlock* RunLenght::encode(DataBlock* src) {
 	vector<unsigned char>::iterator it = src->getIterator();
 	unsigned long int blockSize = src->getSizeInBytes();
 	unsigned long int i = 0;
-	//for(unsigned long int i=0; i < src->getSizeInBytes(); i++){
 
 	while(i < blockSize){
 		//Doble escape
 		if(it[i] == this->escape){
 			db->addByte(it[i]);
 			db->addByte(it[i]);
+			this->stats[it[i]]+=2;
 			i+=1;
 		}else{
 			run = this->getRun(it,i);
@@ -43,6 +55,7 @@ DataBlock* RunLenght::encode(DataBlock* src) {
 				i+=run.count;
 			}else{
 				db->addByte(it[i]);
+				this->stats[it[i]] += 1;
 				i+=1;
 			}
 		}
@@ -53,6 +66,16 @@ DataBlock* RunLenght::encode(DataBlock* src) {
 
 DataBlock* RunLenght::decode(DataBlock* src) {
 	DataBlock * db = new DataBlock();
+	vector<unsigned char>::iterator it = src->getIterator();
+	unsigned long int blockSize = src->getSizeInBytes();
+	unsigned long int i = 0;
+
+
+	while(i < blockSize){
+		if(it[i] == this->escape){
+
+		}
+	}
 	return db;
 }
 
@@ -72,8 +95,13 @@ Run RunLenght::getRun(vector<unsigned char>::iterator it,
 
 void RunLenght::encodeRun(DataBlock* dst, Run r) {
 	dst->addByte(this->escape);
+	this->stats[this->escape] += 1;
 	dst->addByte(r.symbol);
-	dst->addByte(r.count);
+	this->stats[r.symbol] += 1;
+	// Guardo la cantidad en offset-4, porque no hay match menor a 4
+	// esto me permite guardar hasta matches de 260.
+	dst->addByte((char) (r.count -4));
+	this->stats[ (char) (r.count -4)] += 1;
 }
 
 } /* namespace std */
