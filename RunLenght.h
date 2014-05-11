@@ -32,6 +32,7 @@ private:
 	unsigned int stats[256];
 	Run getRun(vector<unsigned char >::iterator, unsigned long int);
 	void encodeRun(DataBlock * dst, Run r);
+	void decodeRun(DataBlock * dst, Run r);
 	void resetStats();
 };
 

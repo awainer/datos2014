@@ -7,6 +7,7 @@
 #include "gtest/gtest.h"
 #include  "../DataBlock.h"
 #include  "../RunLenght.h"
+#include <cstdlib>
 
 namespace std{
 
@@ -59,7 +60,7 @@ TEST(TestRLE, UnMatchStatsYotroNoMatch){
 	RunLenght * encoder = new RunLenght();
 	for (unsigned int i=0; i < sizeof(data) -1 ; i++)
 		db->addByte(data[i]);
-	result=encoder->encode(db);
+	result = encoder->encode(db);
 	stats = encoder->getStats();
 //	for(int i=0;i<256;i++)
 //		cerr << i << " " << stats[i] << endl;
@@ -75,5 +76,56 @@ TEST(TestRLE, UnMatchStatsYotroNoMatch){
 	delete result;
 	delete encoder;
 }
+
+TEST(TestRLE, MatchDemasiadoLargo){
+
+	unsigned int *  stats;
+	DataBlock * db = new DataBlock();
+	DataBlock * result;
+	RunLenght * encoder = new RunLenght();
+	for (unsigned int i=0; i<900 ; i++)
+		db->addByte('X');
+
+	// Un match demasiado largo se debe representar como
+	// varios matches.
+	// 900 = 260 + 260 + 260 + 120 (offset -4)
+	result = encoder->encode(db);
+	stats = encoder->getStats();
+
+	vector<unsigned char>::iterator it = result->getIterator();
+//	for(int i=0;i<result->getSizeInBytes(); i++)
+//		cerr << it[i] << " " << (int) it[i] << endl;
+	ASSERT_EQ(12,result->getSizeInBytes());
+	ASSERT_EQ(4,stats['X']);
+	ASSERT_EQ(4,stats[encoder->getEscapeChar()]);
+	//ASSERT_EQ(1,stats[116]);
+	ASSERT_EQ(3,stats[255]); //full
+	delete db;
+	delete result;
+	delete encoder;
+}
+
+TEST(TestRLE, encodeAndDecode){
+
+	DataBlock * orig = new DataBlock();
+	DataBlock * encoded,*decoded;
+	RunLenght * encoder = new RunLenght();
+	vector<unsigned char>::iterator it1,it2;
+	unsigned char r;
+	for(int i=0;i<5000;i++){
+		r = rand() % 5 + 'a'; //una letra random entre a y e, como para que hay algun run
+		orig->addByte(r);
+	}
+	encoded = encoder->encode(orig);
+	encoder->decode(encoded);
+	ASSERT_LT(encoded->getSizeInBytes(),orig->getSizeInBytes());
+	decoded = encoder->decode(encoded);
+	delete encoded;
+
+	it1 = orig->getIterator();
+	it2 = decoded->getIterator();
+	ASSERT_EQ(decoded->getSizeInBytes(),orig->getSizeInBytes());
+}
+
 
 }
