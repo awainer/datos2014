@@ -125,6 +125,8 @@ TEST(TestRLE, encodeAndDecode){
 	it1 = orig->getIterator();
 	it2 = decoded->getIterator();
 	ASSERT_EQ(decoded->getSizeInBytes(),orig->getSizeInBytes());
+	for(int i=0; i<5000 ;i++)
+		ASSERT_EQ(it1[i],it2[i]);
 }
 
 
