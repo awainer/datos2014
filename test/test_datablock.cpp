@@ -7,15 +7,83 @@
 
 #include "../contrib/gtest/gtest.h"
 #include "../DataBlock.h"
+#include <vector>
 namespace std{
 TEST(DataBlockTest,addbyte){
-	DataBlock * block = new DataBlock((unsigned char*)NULL, 0,0,0);
-	unsigned char  bytesToAdd[]="garompa";//{'g','a','r','o','m','p','a'};
-	unsigned char * ptr = bytesToAdd;
-	block->addBytes(ptr,7); // Deliberadamente omito el '\0'
-	ASSERT_EQ(block->getSizeInBytes(),7);
+	DataBlock * block = new DataBlock();
+	block->addByte(7);
+	vector<unsigned char>::iterator it = block->getIterator();
+	ASSERT_EQ(block->getSizeInBytes(),1);
+	ASSERT_EQ(*it,7);
+	delete block;
 }
 
+TEST(DataBlockTest,buildbyte){
+	DataBlock * block = new DataBlock();
+	unsigned char uno = 1;
+	unsigned char cero = 0;
+	block->addBits(uno,1);
+	block->addBits(uno,1);
+	block->addBits(uno,1);
+	block->addBits(uno,1);
+	block->addBits(cero,1);
+	block->addBits(cero,1);
+	block->addBits(cero,1);
+	block->addBits(uno,1);
+	vector<unsigned char>::iterator it = block->getIterator();
+	ASSERT_EQ(block->getSizeInBytes(),1);
+	ASSERT_EQ(*it,241);
+	delete block;
+}
+
+TEST(DataBlockTest,addbits){
+	DataBlock * block = new DataBlock();
+	unsigned short int unos = 0xFF;
+	block->addBits(unos,4);
+	//block->addByte(1);
+	vector<unsigned char>::iterator it = block->getIterator();
+	ASSERT_EQ(block->getSizeInBytes(),1);
+	ASSERT_EQ(*it,0xF0);
+	delete block;
+}
+
+TEST(DataBlockTest,addbits2){
+	DataBlock * block = new DataBlock();
+	unsigned short int unos = 0xFF;
+	unsigned short int uno = 0x18;
+	block->addBits(unos,4);
+	block->addBits(uno,4);
+	//block->addByte(1);
+	vector<unsigned char>::iterator it = block->getIterator();
+	ASSERT_EQ(block->getSizeInBytes(),1);
+	ASSERT_EQ(*it,0xF8);
+	delete block;
+}
+
+TEST(DataBlockTest,addBitsBytepico){
+	DataBlock * block = new DataBlock();
+	unsigned short int unos = 0xFF;
+	block->addBits(unos,7);
+	block->addBits((unsigned char)0x07,4);
+	vector<unsigned char>::iterator it = block->getIterator();
+	ASSERT_EQ(block->getSizeInBytes(),2);
+	ASSERT_EQ(*it,0xFE);
+	it++;
+	ASSERT_EQ(*it,0xE0);
+	delete block;
+}
+
+TEST(DataBlockTest,bitsAndBytes){
+	DataBlock * block = new DataBlock();
+	block->addBits((unsigned char)0xCC,6);
+	block->addByte((unsigned char)0x07);
+	vector<unsigned char>::iterator it = block->getIterator();
+	ASSERT_EQ(block->getSizeInBytes(),2);
+	ASSERT_EQ(*it,0x30);
+	it++;
+	ASSERT_EQ(*it,0x1C);
+	delete block;
+}
 }
 
 

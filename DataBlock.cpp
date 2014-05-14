@@ -7,64 +7,95 @@
 
 #include "DataBlock.h"
 #include <cstdlib>
+#include <iostream>
 #include <cstring>
-#include <memory.h>
-namespace std {
 
-DataBlock::DataBlock(unsigned char * data, unsigned long int size_in_bytes, char remaining_bits, char remaining_bits_count) {
-	this->data=data;
-	this->size_in_bytes=size_in_bytes;
-	this->remaining_bits=remaining_bits;
-	this->next_byte = data + size_in_bytes;
-	this->incomplete_byte.all= 0;
-	if(remaining_bits)
-		this->addBits(remaining_bits, remaining_bits_count);
+namespace std {
+DataBlock::DataBlock(){
+
+	// Si alguien encuentra una forma mas bonita de
+	// inicializar esto, mas que bienvenida.
+	this->initialize();
+	// Evitemos los segfaults por vector vacío, dale?
+	this->data = new vector<unsigned char>;
+	this->data->push_back(0);
+	this->remaining_bits_count=0;
 }
 
-void DataBlock::addBytes(unsigned char* data, unsigned long int count) {
-	if(!this->remaining_bits){ // Estamos alineados a byte, iupi.
-		// Pido mas memoria. Debería chequear que efectivamente
-		// me la dan. Una optimización posible es alocar de mas, para no alocar cada vez,
-		// aunque implica trackear cuantos bytes libres tengo.
-		if(this->data) //Agrego
-			this->data = (unsigned char*)realloc(this->data, this->size_in_bytes + count);
-		else // Primera data
-			this->data = (unsigned char*)malloc(count);
+DataBlock::DataBlock(vector<unsigned char> * v){
+	this->initialize();
+	this->data = v;
+	this->data->push_back(0);
+	this->remaining_bits_count=0;
+}
+void DataBlock::initialize(){
+	this->remaining_bits_count=0;
+	unsigned char masks[] = {1,3,7,15,31,63,127,255};
+	for (int i=0;i<8;i++)
+		this->masks[i] = masks[i];
+}
 
-		this->next_byte = this->data + this->size_in_bytes; //porsi
-		memcpy((void*)(this->next_byte),(const void *)data,count);
-		this->next_byte+=count;
-		this->size_in_bytes+=count;
+void DataBlock::addByte(unsigned char data) {
+	if(!this->remaining_bits_count){
+		this->data->at((this->data->size()-1)) = data;
+		this->data->push_back(0);
 	}
 	else{
-		//TODO!!!
+		this->addBits(data,8);
 	}
-
 }
 
 void DataBlock::addBits(unsigned char data, unsigned char count) {
+	//if (count>7)
+	//	throw "No se pueden agregar mas de 7 bits con este metodo, usa addByte.";
+
+	//Enmascaro los bits que contienen información
+	data = data & this->masks[count-1];
+	// No se arma byte
+	if (this->remaining_bits_count + count < 8){
+		this->data->at((this->data->size()-1)) =  this->data->at((this->data->size()-1)) | data << (8 - (count +	this->remaining_bits_count));
+		this->remaining_bits_count+=count;
+		return;
+	}
+	// Se arma byte
+	if (this->remaining_bits_count + count == 8){
+		this->data->at((this->data->size()-1)) =  this->data->at((this->data->size()-1)) | data;
+		this->data->push_back(0);
+		this->remaining_bits_count = 0;
+		return;
+	}
+	// Se arma byte y sobran unos bits
+	unsigned char new_byte=0;
+	unsigned short int bits_to_shift = count - (8 - this->remaining_bits_count);
+	this->data->at((this->data->size()-1)) =  this->data->at((this->data->size()-1)) | data >> bits_to_shift;
+	//Alineao a izquierda lo que sobra y lo guardo
+	new_byte = data << (8 - bits_to_shift);
+	this->data->push_back(new_byte);
+	this->remaining_bits_count = count - bits_to_shift;
 }
+
+
 
 unsigned long int DataBlock::getSizeInBytes() {
-	if (this->remaining_bits > 0)
-		return this->size_in_bytes + 1; //redondeo a byte con los bits sueltos
+	if(this->remaining_bits_count == 0)
+		return this->data->size() - 1;
 	else
-		return this->size_in_bytes;
+		return this->data->size();
 }
 
-unsigned char * DataBlock::getalignedData(){
-	return this->data; // Polémico, debería copiarlo?
-}
 
 unsigned long int DataBlock::getSizeInBits() {
-	if(this->remaining_bits)
-		return 8*this->size_in_bytes + this->remaining_bits;
-	else
-		return 8*this->size_in_bytes;
+		return (8*(this->data->size() -1) + this->remaining_bits_count);
+}
+
+vector<unsigned char>::iterator DataBlock::getIterator(){
+	return this->data->begin();
 }
 
 DataBlock::~DataBlock() {
-	// TODO Auto-generated destructor stub
+	delete this->data;
 }
 
 } /* namespace std */
+
+

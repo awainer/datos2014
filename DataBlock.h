@@ -9,34 +9,34 @@
 #define DATABLOCK_H_
 
 #include <cstdint>
+#include <vector>
+#include <array>
 namespace std {
 
 class DataBlock {
 public:
-	DataBlock(unsigned char * data, unsigned long int size_in_bytes, char remaining_bits, char remaining_bits_count);
-	void addBytes(unsigned char * data, unsigned long int count);
+
+
+
+	DataBlock();
+	DataBlock(vector<unsigned char> *v);
+    //iterator begin();
+   // iterator end();
+	//void addBytes(unsigned char * data, unsigned long int count);
+	void addByte(unsigned char data);
 	void addBits(unsigned char data, unsigned char count);
 	unsigned long int getSizeInBytes();
 	unsigned long int getSizeInBits();
 	char getRemainingBits();
-	unsigned char * getalignedData();
+	vector<unsigned char>::iterator getIterator();
 	virtual ~DataBlock();
 private:
-	unsigned char * data;
-	unsigned char * next_byte;
-	unsigned long int size_in_bytes;
-	char	remaining_bits;
-	/**
-	 * Este union tiene el objetivo de poder adicionar bits al último byte.
-	 * La idea es
-	 */
-	union {
-		struct{
-		uint8_t last_byte;
-		uint8_t first_byte;
-		}parts;
-		uint16_t all;
-	} incomplete_byte;
+	vector<unsigned char> * data;
+	unsigned char remaining_bits_count;
+	//vector<unsigned char>::iterator last;
+	char  masks[8];
+	void initialize();
+	//unsigned char masks[8];
 };
 
 } /* namespace std */

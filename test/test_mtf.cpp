@@ -21,7 +21,8 @@ TEST(MTFTest, caaaaxcha) {
 	{
 		ASSERT_EQ(r[i],bloqueMovido[i]);
 	}
-
+	free(r);
+	delete miTrans;
 }
 
 TEST(MTFTest, caaaaxcha_decode) {
@@ -35,7 +36,8 @@ TEST(MTFTest, caaaaxcha_decode) {
 	{
 		ASSERT_EQ(r[i],bloqueMovido[i]);
 	}
-
+	free(r);
+	delete miTrans;
 }
 
 TEST(MTFTest, unchar) {
@@ -44,7 +46,8 @@ TEST(MTFTest, unchar) {
 	int tamanio =  sizeof(miBloque);
 	unsigned char * r = miTrans->encode(tamanio,miBloque);
 	ASSERT_EQ(*r,6);
-
+	delete miTrans;
+	free(r);
 }
 TEST(MTFTest, fullcycle) {
 	MTF * miTrans = new MTF();
@@ -60,9 +63,11 @@ TEST(MTFTest, fullcycle) {
 	unsigned char * s;
 	r = miTrans->encode(sizeof(orig),orig);
 	s = miTrans->decode(sizeof(orig),r);
-	free(r);
 	for(unsigned int i=0;i<sizeof(orig);i++)
 		ASSERT_EQ(orig[i],s[i]);
+	delete miTrans;
+	free(r);
+	free(s);
 }
 
 TEST(MTFTest, vacio) {
@@ -70,7 +75,9 @@ TEST(MTFTest, vacio) {
 	unsigned char  miBloque[] = {};
 	int tamanio =  sizeof(miBloque);
 	unsigned char * r = miTrans->encode(tamanio,miBloque);
-	ASSERT_EQ(*r,*miBloque);
+	ASSERT_FALSE(r);
+	delete miTrans;
+	//ASSERT_EQ(*r,*miBloque);
 
 }
 
