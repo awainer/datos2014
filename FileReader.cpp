@@ -18,7 +18,7 @@ FileReader::FileReader(string path) {
 	//if(stat(path.c_str(), &filestatus) != 0)
 	//	throw( "no se puede abrir el archivo, fijate que exista y tenga permisos.");
 	stat(path.c_str(), &filestatus);
-	cerr << "Filesize: " <<  filestatus.st_size << endl;
+	//cerr << "Filesize: " <<  filestatus.st_size << endl;
 	this->blockSize = this->determineBlockSize(filestatus.st_size);
 	this->fileStream.open(path.c_str(), ios::in | ios::binary);
 	this->lastBlockRead = false;
@@ -31,9 +31,11 @@ DataBlock* FileReader::getBlock() {
 
 	if(!this->lastBlockRead){
 		this->fileStream.read((char*)&(it[0]),this->blockSize);
-		cerr << "postread" << endl;
-		db = new DataBlock(vec);
 		this->lastBlockRead = this->fileStream.eof();
+		//Ajusto el ultimo bloque
+		if (this->lastBlockRead)
+			vec->resize(this->fileStream.gcount());
+		db = new DataBlock(vec);
 		return db;
 	}else{
 		return NULL;
@@ -77,7 +79,7 @@ unsigned long long int FileReader::determineBlockSize(unsigned long long int fil
 		if (fileSize < sizes[i])
 			result = sizes[i+1];
 	}
-	cerr << "DEBUG: determined block size: " << result << endl;
+	//cerr << "DEBUG: determined block size: " << result << endl;
 	return result;
 
 }

@@ -22,6 +22,7 @@ TEST(TestFileReader,readSmallFile){
 	fr = new FileReader(path);
 	ASSERT_TRUE(fr->hasBlocksLeft());
 	block = fr->getBlock();
+	//blockSize = 16k  (7 bloques)
 	ASSERT_EQ(block->getSizeInBytes(),16384);
 	vector<unsigned char>::iterator it = block->getIterator();
 	unsigned char c = '0';
@@ -30,7 +31,13 @@ TEST(TestFileReader,readSmallFile){
 		c+=1;
 		it++;
 	}
-
+	for(int i=0;i<6;i++){
+		ASSERT_TRUE(fr->hasBlocksLeft());
+		delete block;
+		block = fr->getBlock();
+	}
+	ASSERT_FALSE(fr->hasBlocksLeft());
+	ASSERT_EQ(block->getSizeInBytes(),1696);
 	delete block;
 	delete fr;
 }
