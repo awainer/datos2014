@@ -20,16 +20,18 @@ FileReader::FileReader(string path) {
 	stat(path.c_str(), &filestatus);
 	cerr << "Filesize: " <<  filestatus.st_size << endl;
 	this->blockSize = this->determineBlockSize(filestatus.st_size);
-	this->fileStream.open(path.c_str(), ios::out | ios::binary);
+	this->fileStream.open(path.c_str(), ios::in | ios::binary);
 	this->lastBlockRead = false;
 }
 
 DataBlock* FileReader::getBlock() {
-	vector<unsigned char> * vec = new vector<unsigned char>;
-	DataBlock * db;
-	// http://stackoverflow.com/questions/15138353/reading-the-binary-file-into-the-vector-of-unsigned-chars
+	vector<unsigned char> * vec = new vector<unsigned char>(this->blockSize);
+	vector<unsigned char>::iterator it = vec->begin();
+	DataBlock * db=NULL;
+
 	if(!this->lastBlockRead){
-		this->fileStream.read((char*)&(vec[0]),this->blockSize);
+		this->fileStream.read((char*)&(it[0]),this->blockSize);
+		cerr << "postread" << endl;
 		db = new DataBlock(vec);
 		this->lastBlockRead = this->fileStream.eof();
 		return db;

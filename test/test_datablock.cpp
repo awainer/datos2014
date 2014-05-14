@@ -84,6 +84,23 @@ TEST(DataBlockTest,bitsAndBytes){
 	ASSERT_EQ(*it,0x1C);
 	delete block;
 }
+
+TEST(DataBlockTest,fromVector){
+	DataBlock * block;;
+	vector<unsigned char> * v;
+	v = new vector<unsigned char>;
+	v->push_back('G');
+	v->push_back('A');
+	v->push_back('R');
+	v->push_back('O');
+	v->push_back('L');
+	v->push_back('A');
+	block = new DataBlock(v);
+	ASSERT_EQ(block->getSizeInBytes(),6);
+	delete block;
+}
+
+
 }
 
 
