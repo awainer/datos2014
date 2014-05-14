@@ -8,11 +8,22 @@
 #include "../FileReader.h"
 
 namespace std{
-/*TEST(TestFileReader,FileNotFound){
+TEST(TestFileReader,readSmallFile){
+	string path = "/tmp/small.txt";
+	ofstream outfile (path.c_str(),std::ofstream::binary);
+	FileReader * fr;
+	char data[]="0123456789";
+	// Creo un archivo de pruebas
+	for(int i=0; i<10000;i++)
+		outfile.write((char*)&data,sizeof(data));
+	outfile.close();
 
-	ASSERT_DEATH({FileReader * fr = new FileReader("/tmp/GAROMPA");},".*");
+	fr = new FileReader(path);
+	ASSERT_TRUE(fr->hasBlocksLeft());
 
-}*/
+
+	delete fr;
+}
 
 }
 
