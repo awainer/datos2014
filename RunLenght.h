@@ -28,7 +28,7 @@ public:
 	unsigned int * getStats();
 	unsigned char getEscapeChar();
 private:
-	char escape = '$';
+	char escape;
 	unsigned int stats[256];
 	Run getRun(vector<unsigned char >::iterator, unsigned long int);
 	void encodeRun(DataBlock * dst, Run r);

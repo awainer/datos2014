@@ -14,6 +14,7 @@
 namespace std {
 
 RunLenght::RunLenght() {
+	this->escape='$';
 	this->resetStats();
 }
 
