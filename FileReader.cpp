@@ -74,12 +74,12 @@ unsigned long long int FileReader::determineBlockSize(unsigned long long int fil
 			};
 	unsigned long long int result;
 	//Ineficente? Si! Son 4 iteraciones por archivo....
-	for(unsigned int i=0;i<sizeof(sizes)-3; i+=2){
-		//cerr << " z " << sizeof(sizes) << "fs: " << fileSize << "  i: " << i << " sizes[i] " << sizes[i] << endl;
+	for(unsigned int i=0;i<sizes.size(); i+=2){
+		cerr << " z " << sizeof(sizes) << "fs: " << fileSize << "  i: " << i << " sizes[i] " << sizes[i] << endl;
 		if (fileSize < sizes[i])
 			result = sizes[i+1];
 	}
-	//cerr << "DEBUG: determined block size: " << result << endl;
+	cerr << "DEBUG: determined block size: " << result << endl;
 	return result;
 
 }
