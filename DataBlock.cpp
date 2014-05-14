@@ -71,7 +71,8 @@ void DataBlock::addBits(unsigned char data, unsigned char count) {
 	//Alineao a izquierda lo que sobra y lo guardo
 	new_byte = data << (8 - bits_to_shift);
 	this->data->push_back(new_byte);
-	this->remaining_bits_count = count - bits_to_shift;
+	//this->remaining_bits_count = count - bits_to_shift;
+	this->remaining_bits_count = bits_to_shift;
 }
 
 

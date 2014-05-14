@@ -86,7 +86,7 @@ TEST(DataBlockTest,bitsAndBytes){
 }
 
 TEST(DataBlockTest,fromVector){
-	DataBlock * block;;
+	DataBlock * block;
 	vector<unsigned char> * v;
 	v = new vector<unsigned char>;
 	v->push_back('G');
@@ -100,6 +100,21 @@ TEST(DataBlockTest,fromVector){
 	delete block;
 }
 
+TEST(DataBlockTest,deACinco){
+	DataBlock * block = new DataBlock();
+	unsigned char aux= 0xFF;
+	vector<unsigned char>::iterator it;
+	ASSERT_EQ(block->getSizeInBits(),0);
+	block->addBits(aux,5);
+	ASSERT_EQ(block->getSizeInBits(),5);
+	block->addBits(aux,5);
+	it = block->getIterator();
+	ASSERT_EQ(*it,255);
+	it++;
+	ASSERT_EQ(*it,192);
+	ASSERT_EQ(block->getSizeInBits(),10);
+	delete block;
+}
 
 }
 
