@@ -19,6 +19,7 @@ public:
 
 
 	DataBlock();
+	DataBlock(vector<unsigned char> *v);
     //iterator begin();
    // iterator end();
 	//void addBytes(unsigned char * data, unsigned long int count);
@@ -30,10 +31,11 @@ public:
 	vector<unsigned char>::iterator getIterator();
 	virtual ~DataBlock();
 private:
-	vector<unsigned char> data;
+	vector<unsigned char> * data;
 	unsigned char remaining_bits_count;
 	//vector<unsigned char>::iterator last;
 	char  masks[8];
+	void initialize();
 	//unsigned char masks[8];
 };
 

@@ -117,16 +117,17 @@ TEST(TestRLE, encodeAndDecode){
 		orig->addByte(r);
 	}
 	encoded = encoder->encode(orig);
-	encoder->decode(encoded);
 	ASSERT_LT(encoded->getSizeInBytes(),orig->getSizeInBytes());
 	decoded = encoder->decode(encoded);
-	delete encoded;
-
 	it1 = orig->getIterator();
 	it2 = decoded->getIterator();
 	ASSERT_EQ(decoded->getSizeInBytes(),orig->getSizeInBytes());
 	for(int i=0; i<5000 ;i++)
 		ASSERT_EQ(it1[i],it2[i]);
+	delete encoded;
+	delete encoder;
+	delete decoded;
+	delete orig;
 }
 
 
