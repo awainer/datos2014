@@ -41,6 +41,7 @@ TEST(testCompressedWriter,testOneBlock){
 
 	free(readBuffer);
 	delete writer;
+	delete block;
 }
 
 
