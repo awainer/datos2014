@@ -11,12 +11,13 @@
 
 class BWT {
 private:
-	int algo=1;
+	char * vector_punteros [];
 
 public:
 	BWT();
+/*	std::string transform(std::string cadena_orig);
+	std::string untransform(std::string cadena_ant);*/
 	~BWT();
-
 };
 
 #endif // BWT_H

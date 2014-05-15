@@ -6,12 +6,16 @@
  */
 
 #include "BWT.h"
+#include <string>
 
 BWT::BWT() {
-	this->algo = 2;
 }
+/*
+std::string BWT::transform(std::string cadena_orig) {
+	for(int i=0 ; i < cadena_orig.size;i++)
+		this->vector_punteros[i] = &cadena_orig[i];
+}*/
 
 BWT::~BWT() {
-	this->algo = 4;
 }
 
