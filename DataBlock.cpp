@@ -28,6 +28,14 @@ DataBlock::DataBlock(vector<unsigned char> * v){
 	this->data->push_back(0);
 	this->remaining_bits_count=0;
 }
+DataBlock::DataBlock(vector<unsigned char> * v,unsigned char remaining_bits){
+	this->initialize();
+	this->data = v;
+	this->remaining_bits_count=remaining_bits;
+	if(!remaining_bits)
+		this->data->push_back(0);
+}
+
 void DataBlock::initialize(){
 	this->remaining_bits_count=0;
 	unsigned char masks[] = {1,3,7,15,31,63,127,255};

@@ -6,21 +6,51 @@
  */
 
 #include "CompressedFileReader.h"
-
+#include <iostream>
 namespace std {
 
 
 CompressedFileReader::CompressedFileReader(string path) {
-	this->nextBlockSizeInBits=0;
+	//TODO chequeo
+	this->fileStream.open(path.c_str(),ios::in | ios::binary);
+	this->fileStream.read((char*) &(this->nextBlockSizeInBits), 4);
+
 }
 
 DataBlock* CompressedFileReader::getBlock() {
-	DataBlock * db = nullptr;
+	//cerr << "NextBlockSize: " << this->nextBlockSizeInBits;
+	DataBlock * db=NULL;
+	vector<unsigned char> * vec; //= new vector<unsigned char>();
+	vector<unsigned char>::iterator it;
+	unsigned char remainingBits=0;
+	unsigned int vecSize;
+
+	vecSize = (this->nextBlockSizeInBits / 8);
+	if (this->nextBlockSizeInBits % 8 > 0){
+		vecSize+=1;
+		remainingBits = this->nextBlockSizeInBits % 8;
+	}
+	vec = new vector<unsigned char>(vecSize + 4); //4 para header
+	it = vec->begin();
+	this->fileStream.read((char*)&(it[0]),vecSize+4);
+
+	if(this->fileStream.eof()){
+		this->nextBlockSizeInBits=0;
+		vec->resize(this->fileStream.gcount());
+	}else{
+		//Extraigo los últimos 32 bits
+		it = vec->begin();
+		this->nextBlockSizeInBits = * (uint32_t*) &it[vecSize];
+		//cerr << "NexBlockSizeBits: " << this->nextBlockSizeInBits << endl;
+		vec->resize(vec->size() - 4 );
+	}
+
+	db = new DataBlock(vec, remainingBits);
 	return db;
 }
 
 CompressedFileReader::~CompressedFileReader() {
-	// TODO Auto-generated destructor stub
+	this->fileStream.close();
 }
 
 } /* namespace std */

@@ -20,6 +20,7 @@ public:
 
 	DataBlock();
 	DataBlock(vector<unsigned char> *v);
+	DataBlock(vector<unsigned char> *v,unsigned char remaining_bits);
     //iterator begin();
    // iterator end();
 	//void addBytes(unsigned char * data, unsigned long int count);
