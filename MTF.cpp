@@ -43,8 +43,6 @@ void MTF::updateStatus(unsigned char lastpos){
 	list<unsigned short int>::iterator it = this->symbol_status.begin();
 	unsigned short int elem;
 
-
-
 	if (lastpos == 0)
 		return;
 	advance(it,lastpos);
@@ -62,46 +60,53 @@ void MTF::updateStatus(unsigned char lastpos){
 unsigned char MTF::getCurrentPosition(unsigned char c){
 
 	list<unsigned short int>::iterator it = this->symbol_status.begin();
-	char pos = 0;
+	unsigned char pos = 0;
 	while(it != this->symbol_status.end()){
 		if (*it == c)
 			return pos;
-		pos++;
+	pos++;
 	it++;
 	}
 	return pos;
 }
 
 
-unsigned char * MTF::encode(unsigned long int blockLenght,unsigned char * blockData){
+DataBlock * MTF::encode(DataBlock * blockData){
 
-	unsigned long int resultpos=0;
-	unsigned char * result = NULL;
+	//unsigned long int resultpos=0;
+	DataBlock * result = new DataBlock();
+	unsigned char r;
 	this->resetStatus();
-
+	vector<unsigned char>::iterator it = blockData->getIterator();
+	unsigned long int blockLenght=blockData->getSizeInBytes();
 	if(!blockLenght)
 		return result;
 
-	result =(unsigned char *) malloc(blockLenght);
+	//result =(unsigned char *) malloc(blockLenght);
 	for (unsigned long int i=0;i<blockLenght;i++){
-		result[resultpos] = this->getCurrentPosition(blockData[i]);
-		this->updateStatus(result[resultpos]);
-		resultpos++;
+		r=this->getCurrentPosition(it[i]);
+		result->addByte(r);
+		this->updateStatus(r);
+		//resultpos++;
 	}
 	return result;
 }
 
-unsigned char * MTF::decode(unsigned long int blockLenght,unsigned char * blockData){
+DataBlock * MTF::decode(DataBlock * blockData){
 	unsigned long int resultpos=0;
-	unsigned char * result = NULL;
+	unsigned long int blockLenght=blockData->getSizeInBytes();
+	vector<unsigned char>::iterator it = blockData->getIterator();
+	DataBlock * result = new DataBlock();
 	this->resetStatus();
 
 	if(!blockLenght)
 		return result;
-	result =(unsigned char *) malloc(blockLenght);
+
 	for (unsigned long int i=0;i<blockLenght;i++){
-		result[resultpos] = this->getElementAt(blockData[i]);
-		this->updateStatus(blockData[i]);
+		result->addByte(this->getElementAt(it[i]));
+		//cerr << "ENCODE " << it[i] << " as " << (int)getElementAt(it[i]) << endl;
+		this->updateStatus(it[i]);
+		//cerr << "NEW POS " << (int)getElementAt(it[i]) << endl;
 		resultpos++;
 	}
 	return result;

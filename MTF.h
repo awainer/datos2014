@@ -9,15 +9,15 @@
 #define MTF_H_
 
 #include <list>
-
+#include "DataBlock.h"
 namespace std {
 
 class MTF {
 public:
 	MTF();
 	virtual ~MTF();
-	unsigned char * encode(unsigned long int blockLenght,unsigned char * blockData);
-	unsigned char * decode(unsigned long int blockLenght,unsigned char * blockData);
+	DataBlock * encode(DataBlock * blockData);
+	DataBlock * decode(DataBlock * blockData);
 private:
 	void resetStatus();
 	void updateStatus(unsigned char);
