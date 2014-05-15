@@ -35,6 +35,7 @@ TEST(testIntegracionCompressedWriter,testOneBlock){
 	reader = new CompressedFileReader(path);
 	readBlock = reader->getBlock();
 	ASSERT_EQ(readBlock->getSizeInBits(),125);
+	delete readBlock;
 	delete reader;
 	delete writer;
 	delete block;
@@ -84,6 +85,9 @@ TEST(testIntegracionCompressedWriter,testThreeBlocks){
 
 	delete reader;
 	delete writer;
+	delete block1;
+	delete block2;
+	delete block3;
 
 }
 
@@ -148,6 +152,9 @@ TEST(testIntegracionCompressedWriter,testThreeBlocksWithRandomData){
 
 	delete reader;
 	delete writer;
+	delete block1;
+	delete block2;
+	delete block3;
 
 }
 
