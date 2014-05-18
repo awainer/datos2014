@@ -4,13 +4,54 @@
  *  Created on: 27/04/2014
  *      Author: tavo
  */
-/*
+
 #include "gtest/gtest.h"
 #include "../BWT.h"
-
+#include "../DataBlock.h"
 
 namespace std{
-TEST(BWTTest, caaaaxcha) {
+
+TEST(BWTTEST,testSortShortBlock){
+	unsigned char  initVector[] = {'C','A','A','A','X','C','H','A'};
+	unsigned char  expectedResultVector[] = {'A','A','A','X','C','H','A','C'};
+	/**
+	 * Las rotaciones:
+	 *  CAAAXCHA
+	 *  ACAAAXCH
+	 *  HACAAAXC
+	 *  CHACAAAX
+	 *  XCHACAAA
+	 *  AXCHACAA
+	 *  AAXCHACA
+	 *  AAAXCHAC <--Esta deberia ser la mas chica
+	 *
+	 */
+
+	DataBlock * orig = new DataBlock();
+	DataBlock * result;
+	BWT * bwt = new BWT();
+	for (unsigned int i=0; i<sizeof(initVector);i++)
+		orig->addByte(initVector[i]);
+
+	result = bwt->transform(orig);
+	auto it = result->getIterator();
+	for (unsigned int i=0; i<sizeof(initVector);i++)
+		ASSERT_EQ(it[i],expectedResultVector[i]);
+
+	delete bwt;
+	delete orig;
+	delete result;
+
+}
+
+
+
+
+
+
+}
+
+/*TEST(BWTTest, caaaaxcha) {
 	MTF * miTrans = new MTF();
 	unsigned char  miBloque[] = {'C','A','A','A','X','C','H','A'};
 	unsigned char  bloqueMovido[] = {59,61,1,0,38,3,55,0};

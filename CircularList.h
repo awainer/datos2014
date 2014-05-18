@@ -30,6 +30,7 @@ public:
 	unsigned long int getQuantityNodes();
 	void addNode(unsigned char val);
 	DataBlock * getStringStartingAt(unsigned long int initial_node);
+	DataBlock * getStringStartingAtNode(CircularListNode * initial_node);
 	CircularListNode * getNodeAt(unsigned long int node_number);
 	list<CircularListNode *>::iterator getIterator();
 	list<CircularListNode *>::iterator getIteratorAt(unsigned long int initial_node);

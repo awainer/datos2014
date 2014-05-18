@@ -70,6 +70,18 @@ DataBlock * CircularList::getStringStartingAt(unsigned long int initial_node){
 	return block;
 }
 
+DataBlock * CircularList::getStringStartingAtNode(CircularListNode * initial_node){
+	//list<CircularListNode *>::iterator itNodes = this->list_circular_nodes.begin();
+	DataBlock * block = new DataBlock();
+	CircularListNode * actual_node=initial_node;
+
+	for (unsigned long int i = 1; i <= this->quantity_nodes; i++){
+		block->addByte(actual_node->getVal());
+		actual_node= (actual_node->getNext());
+	}
+	return block;
+}
+
 
 CircularListNode * CircularList::getNodeAt(unsigned long int node_number){
 	list<CircularListNode *>::iterator itNodes = this->list_circular_nodes.begin();
