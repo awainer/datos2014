@@ -38,8 +38,9 @@ bool BWT::nodeCompare(CircularListNode * n1, CircularListNode * n2){
 }
 
 DataBlock * BWT::transform(DataBlock * original_block) {
-	//DataBlock * result_block;
+	DataBlock * result_block =new DataBlock();
 	unsigned char un_char;
+	uint32_t row=0; //TODO
 
 	vector<unsigned char>::iterator it = original_block->getIterator();
 
@@ -66,15 +67,15 @@ DataBlock * BWT::transform(DataBlock * original_block) {
 			[this] (CircularListNode *n1,CircularListNode *n2)
 				  {return this->nodeCompare(n1,n2);});
 
-	//this->circular_list->getIteratorAt(i);
+	// TODO: encontrar la posicion del bloque original
+	//puaj!
+	for(int i=0;i<4;i++)
+		result_block->addByte( *((char *) (i +&row)) );
 
 
-	//std::sort (myvector.begin()+4, myvector.end(), myfunction);
+	return result_block;
 
-	return this->circular_list->getStringStartingAtNode(vec.at(0));
-
-//	for(int i=0 ; i < cadena_orig.size;i++)
-//		this->vector_punteros[i] = &cadena_orig[i];
+	//TODO: calcular ultima columna y agregarla al datablock
 
 }
 
