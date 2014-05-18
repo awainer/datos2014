@@ -10,7 +10,6 @@
 #include <list>
 #include <iostream>
 
-
 namespace std{
 
 
@@ -70,6 +69,49 @@ DataBlock * CircularList::getStringStartingAt(unsigned long int initial_node){
 
 	return block;
 }
+
+
+CircularListNode * CircularList::getNodeAt(unsigned long int node_number){
+	list<CircularListNode *>::iterator itNodes = this->list_circular_nodes.begin();
+
+	for (unsigned long int i = 1; i < node_number; i++){
+		itNodes++;
+	}
+
+	return (*itNodes);
+}
+
+
+unsigned long int CircularList::getPosNode(CircularListNode * node){
+	list<CircularListNode *>::iterator itNodes = this->list_circular_nodes.begin();
+
+	for (unsigned long int i = 1; i <= quantity_nodes; i++){
+		if ((*itNodes)== node){
+			return i;
+		}
+		itNodes++;
+	}
+	return 0;
+}
+
+
+list<CircularListNode *>::iterator CircularList::getIterator(){
+	list<CircularListNode *>::iterator itNodes = this->list_circular_nodes.begin();
+
+	return itNodes;
+}
+
+
+list<CircularListNode *>::iterator CircularList::getIteratorAt(unsigned long int initial_node){
+	list<CircularListNode *>::iterator itNodes = this->list_circular_nodes.begin();
+
+	for (unsigned long int i = 1; i < initial_node; i++){
+		itNodes++;
+	}
+
+	return itNodes;
+}
+
 
 
 CircularList::~CircularList() {

@@ -119,19 +119,56 @@ TEST(CircularListTest,addABCandObtainBCA){
 	ASSERT_EQ('b',auxnode->getVal());
 
 
-	it = cadena->getIterator();
-	ASSERT_EQ(*it,auxnode->getVal());
+	it2 = cadena->getIterator();
+	ASSERT_EQ(*it2,auxnode->getVal());
 	auxnode=(auxnode->getNext());
-	it++;
-	ASSERT_EQ(*it,auxnode->getVal());
+	it2++;
+	ASSERT_EQ(*it2,auxnode->getVal());
 	auxnode=auxnode->getNext();
-	it++;
-	ASSERT_EQ(*it,auxnode->getVal());
+	it2++;
+	ASSERT_EQ(*it2,auxnode->getVal());
 
 	delete cadena;
 	delete block;
 	delete circular_list;
 
 }
+/*
+TEST(CircularListTest,addABCandObtainBCA){
+	DataBlock * block = new DataBlock();
+	CircularList * circular_list = new CircularList();
+	block->addByte('a');
+	block->addByte('b');
+	block->addByte('c');
+	vector<unsigned char>::iterator it = block->getIterator();
+	unsigned char un_char;
+
+	for (int i = 1; i<=3; i++){
+		un_char = (*it);
+		circular_list->addNode(un_char);
+		it++;
+	}
+
+	DataBlock * cadena = circular_list->getStringStartingAt(2);
+	vector<unsigned char>::iterator it2 = cadena->getIterator();
+
+	CircularListNode * auxnode = circular_list->getFirstNode();
+
+	auxnode=(auxnode->getNext());
+
+	it = cadena->getIterator();
+	auxnode=(auxnode->getNext());
+	it++;
+	auxnode=auxnode->getNext();
+	it++;
+
+
+
+	delete cadena;
+	delete block;
+	delete circular_list;
+
+}
+*/
 
 }
