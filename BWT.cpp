@@ -79,6 +79,7 @@ DataBlock * BWT::transform(DataBlock * original_block) {
 }
 
 BWT::~BWT() {
+	delete this->circular_list;
 }
 
 }
