@@ -20,10 +20,10 @@ public:
 	bool hasBlocksLeft();
 	string getFilePath();
 	virtual ~FileReader();
+	void close();
 
 private:
 	unsigned long long int determineBlockSize(unsigned long long int fileSize);
-	bool eof();
 	ifstream fileStream;
 	unsigned long long int blockSize;
 	bool lastBlockRead;

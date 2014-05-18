@@ -84,4 +84,8 @@ unsigned long long int FileReader::determineBlockSize(unsigned long long int fil
 
 }
 
+void FileReader::close() {
+	this->fileStream.close();
+}
+
 } /* namespace std */

@@ -84,6 +84,7 @@ DataBlock * MTF::encode(DataBlock * blockData){
 
 	//result =(unsigned char *) malloc(blockLenght);
 	for (unsigned long int i=0;i<blockLenght;i++){
+		//cerr << "MTF: encodeando char# " << i << endl;
 		r=this->getCurrentPosition(it[i]);
 		result->addByte(r);
 		this->updateStatus(r);

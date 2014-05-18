@@ -15,8 +15,10 @@ class CompressedFileReader {
 public:
 	//CompressedFileReader();
 	CompressedFileReader(string path);
+	bool hasBlocksLeft();
 	DataBlock * getBlock();
 	virtual ~CompressedFileReader();
+	void close();
 private:
 	uint32_t nextBlockSizeInBits;
 	ifstream fileStream;

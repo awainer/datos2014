@@ -49,6 +49,13 @@ DataBlock* CompressedFileReader::getBlock() {
 	return db;
 }
 
+void CompressedFileReader::close() {
+	this->fileStream.close();
+}
+bool CompressedFileReader::hasBlocksLeft() {
+	return not this->fileStream.eof();
+}
+
 CompressedFileReader::~CompressedFileReader() {
 	this->fileStream.close();
 }

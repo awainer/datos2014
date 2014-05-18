@@ -79,8 +79,9 @@ DataBlock* RunLenght::decode(DataBlock* src) {
 	unsigned long int blockSize = src->getSizeInBytes();
 	unsigned long int i = 0;
 
-
+	//cerr << "RLE: blockSize" << blockSize << endl;
 	while(i < blockSize){
+		//cerr << "RLE decoding: #" << i << " " << it[i] << endl;
 		if(it[i] == this->escape){
 			i++;
 			// Escape literal escapado (doble escape)
@@ -107,6 +108,7 @@ Run RunLenght::getRun(vector<unsigned char>::iterator it,
 	Run run = Run();
 	run.symbol = it[position];
 	position+=1;
+
 	while((run.symbol == it[position]) && (count < 259)){
  		position+=1;
 		count+=1;
