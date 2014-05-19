@@ -81,10 +81,13 @@ TEST(CircularListTest,addabc){
 	CircularListNode * auxnode = circular_list->getFirstNode();
 
 	ASSERT_EQ('a',auxnode->getVal());
+	ASSERT_EQ('c',auxnode->getPrevious()->getVal());
 	auxnode=(auxnode->getNext());
 	ASSERT_EQ('b',auxnode->getVal());
+	ASSERT_EQ('a',auxnode->getPrevious()->getVal());
 	auxnode=auxnode->getNext();
 	ASSERT_EQ('c',auxnode->getVal());
+	ASSERT_EQ('b',auxnode->getPrevious()->getVal());
 
 	delete cadena;
 	delete block;

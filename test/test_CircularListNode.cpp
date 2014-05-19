@@ -27,6 +27,9 @@ TEST(CircularListNodeTest,addABandComparePointers){
 
 	circular_list_node->setNext(circular_list_node2);
 	circular_list_node2->setNext(circular_list_node);
+	circular_list_node->setPrevious(circular_list_node2);
+	circular_list_node2->setPrevious(circular_list_node);
+
 
 	ASSERT_EQ(circular_list_node->getVal(),'a');
 	ASSERT_EQ(circular_list_node2->getVal(),'b');
@@ -34,6 +37,8 @@ TEST(CircularListNodeTest,addABandComparePointers){
 	ASSERT_EQ(circular_list_node2->getNext(),circular_list_node);
 	ASSERT_EQ((circular_list_node2->getNext())->getVal(),'a');
 	ASSERT_EQ((circular_list_node->getNext())->getVal(),'b');
+	ASSERT_EQ((circular_list_node2->getPrevious())->getVal(),'a');
+	ASSERT_EQ((circular_list_node->getPrevious())->getVal(),'b');
 
 
 	delete circular_list_node;

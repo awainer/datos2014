@@ -15,6 +15,9 @@ namespace std{
 
 CircularList::CircularList() {
 	this->quantity_nodes = 0;
+//	this->list_circular_nodes = NULL;
+	this->first_node = NULL;
+	this->last_node = NULL;
 }
 
 
@@ -37,12 +40,14 @@ void CircularList::addNode(unsigned char val){
 	CircularListNode * new_node;
 	if (this->quantity_nodes == 0) {
 		new_node = new CircularListNode(val);
+		new_node->setPrevious(new_node);
 		this->first_node = new_node;
 		this->last_node = new_node;
 
 	}
 	else{
-		new_node = new CircularListNode(val,this->first_node);
+		new_node = new CircularListNode(val,this->first_node,this->last_node);
+		this->first_node->setPrevious(new_node);
 	}
 	(this->last_node)->setNext(new_node);
 	this->last_node = new_node;
