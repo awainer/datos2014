@@ -88,10 +88,9 @@ DataBlock * BWT::transform(DataBlock * original_block) {
 	sort (vec.begin(), vec.end(),
 			[this] (CircularListNode *n1,CircularListNode *n2)
 				  {return this->nodeCompare(n1,n2);});
-/*
-	// ARI DESCOMENTA ESTO
+
 	bool end_of_cycle = false;
-	for (unsigned long int i = 0; ((i < original_block->getSizeInBytes()) || (end_of_cycle)) ; i++){
+	for (unsigned long int i = 0; (i < (vec.size() -1 ) && (!end_of_cycle)) ; i++){
 		CircularListNode * current = vec[i];
 		CircularListNode * orig_string = this->circular_list->getFirstNode();
 
@@ -100,7 +99,7 @@ DataBlock * BWT::transform(DataBlock * original_block) {
 			end_of_cycle = true;
 		}
 	}
-*/
+
 	// TODO: encontrar la posicion del bloque original
 	//puaj!
 	for(int i=0;i<4;i++)
