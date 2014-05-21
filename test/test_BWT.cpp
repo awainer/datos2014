@@ -43,10 +43,12 @@ TEST(BWTTEST,testSortShortBlock){
 	result = bwt->transform(orig);
 	ASSERT_EQ(result->getSizeInBytes()-4,orig->getSizeInBytes());
 	auto it = result->getIterator();
-	for (unsigned int i=0; i<sizeof(initVector);i++){
-		cerr << it[i+4] << endl;
+	for (unsigned int i=0; i<sizeof(initVector);i++)
 		ASSERT_EQ(it[i+4],expectedResultVector[i]);
-	}
+
+	ASSERT_EQ(*((uint32_t*)&it[0]),4);
+//	for (unsigned int i=0; i<4;i++)
+//			cerr << "LALA" << (int)it[i] << endl;
 
 	it = result->getIterator();
 	// Verifico el número de columna original
