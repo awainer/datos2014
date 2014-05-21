@@ -11,12 +11,14 @@
 #include <string>
 #include <vector>
 #include <algorithm>    // std::sort
+#include <iostream>
 
 namespace std{
 
 BWT::BWT() {
 	this->circular_list = new CircularList();
 }
+
 
 bool BWT::nodeCompare(CircularListNode * n1, CircularListNode * n2){
 	// True si n1 precede a n2, segun la referencia.
@@ -25,9 +27,9 @@ bool BWT::nodeCompare(CircularListNode * n1, CircularListNode * n2){
 	CircularListNode * node2 = n2;
 	unsigned long int n = this->circular_list->getQuantityNodes();
 	do{
-		if(n1->getVal() < n2->getVal())
+		if(node1->getVal() < node2->getVal())
 			return true;
-		if(n1->getVal() > n2->getVal())
+		if(node1->getVal() > node2->getVal())
 			return false;
 		//son iguales, me fijo en el siguiente
 		node1 = node1->getNext();
@@ -36,6 +38,26 @@ bool BWT::nodeCompare(CircularListNode * n1, CircularListNode * n2){
 	}while(n>0);
 	return false; //o true, es lo mismo, son iguales
 }
+
+
+bool BWT::checkStringsEquals(CircularListNode * n1, CircularListNode * n2){
+	CircularListNode * node1 = n1;
+	CircularListNode * node2 = n2;
+	unsigned long int n = this->circular_list->getQuantityNodes();
+	do{
+		if(node1->getVal() < node2->getVal())
+			return false;
+		if(node1->getVal() > node2->getVal())
+			return false;
+		//son iguales, me fijo en el siguiente
+		node1 = node1->getNext();
+		node2 = node2->getNext();
+		n--;
+	}while(n>0);
+
+	return true; //o true, es lo mismo, son iguales
+}
+
 
 DataBlock * BWT::transform(DataBlock * original_block) {
 	DataBlock * result_block =new DataBlock();
@@ -63,19 +85,48 @@ DataBlock * BWT::transform(DataBlock * original_block) {
 	// Lambda functions FTW!
 	// http://stackoverflow.com/questions/18273997/passing-a-private-method-of-the-class-as-the-compare-operator-for-stdsort
 	// http://es.cppreference.com/w/cpp/language/lambda
-	sort (vec.begin(), vec.end()-1,
+	sort (vec.begin(), vec.end(),
 			[this] (CircularListNode *n1,CircularListNode *n2)
 				  {return this->nodeCompare(n1,n2);});
+/*
+	// ARI DESCOMENTA ESTO
+	bool end_of_cycle = false;
+	for (unsigned long int i = 0; ((i < original_block->getSizeInBytes()) || (end_of_cycle)) ; i++){
+		CircularListNode * current = vec[i];
+		CircularListNode * orig_string = this->circular_list->getFirstNode();
 
+		if (this->checkStringsEquals(orig_string, current)){
+			row = i;
+			end_of_cycle = true;
+		}
+	}
+*/
 	// TODO: encontrar la posicion del bloque original
 	//puaj!
 	for(int i=0;i<4;i++)
 		result_block->addByte( *((char *) (i +&row)) );
 
+	// Muestro el vector salida
+	for (unsigned long int i = 0; i < original_block->getSizeInBytes(); i++){
+		CircularListNode * current = vec[i];
+		CircularListNode * current2 = current;
+		for (unsigned long int j = 0; j < original_block->getSizeInBytes(); j++){
+			cerr << current2->getVal();
+			current2=current2->getNext();
+		}
+		cerr << endl;
+	}
+
+	// Paso el resultado al Data Block de salida
+	for (unsigned long int i = 0; i < original_block->getSizeInBytes(); i++){
+
+		CircularListNode * current = vec[i];
+		CircularListNode * prev = current->getPrevious();
+		unsigned char val = prev->getVal();
+		result_block->addByte(val);
+	}
 
 	return result_block;
-
-	//TODO: calcular ultima columna y agregarla al datablock
 
 }
 

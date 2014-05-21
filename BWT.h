@@ -17,6 +17,7 @@ private:
 	char * vector_punteros [];
 	CircularList * circular_list;
 	bool nodeCompare(CircularListNode * n1, CircularListNode * n2);
+	bool checkStringsEquals(CircularListNode * n1, CircularListNode * n2);
 
 public:
 	BWT();

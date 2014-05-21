@@ -13,34 +13,47 @@ namespace std{
 
 TEST(BWTTEST,testSortShortBlock){
 	unsigned char  initVector[] = {'C','A','A','A','X','C','H','A'};
-
+	uint32_t row=4;
 	//unsigned char  expectedResultVector[] = {'C','A','H','A','A','X','C','A'};
+
+	unsigned char  expectedResultVector[] = {'C','A','H','A','A','X','C','A'};
 	/**
 	 * Las rotaciones, ordenadas alfabeticamente:
-	 *  AAAXCHAC <--Esta deberia ser la mas chica
-	 *  AAXCHACA
-	 *  ACAAAXCH
-	 *  AXCHACAA
-	 *  CAAAXCHA
-	 *  CHACAAAX
-	 *  HACAAAXC
-	 *  XCHACAAA
+	 * 0 AAAXCHAC <--Esta deberia ser la mas chica
+	 * 1 AAXCHACA
+	 * 2 ACAAAXCH
+	 * 3 AXCHACAA
+	 * 4 CAAAXCHA
+	 * 5 CHACAAAX
+	 * 6 HACAAAXC
+	 * 7 XCHACAAA
 	 *
-	 *  El reusltado (ultima columna): CAHAAXCA
+	 *  El resultado (ultima columna): CAHAAXCA nro string original
+	 *  Nro de stirng original: 4
 	 */
 
 	DataBlock * orig = new DataBlock();
 	DataBlock * result;
 	BWT * bwt = new BWT();
+
+	// Agrego la columna original
 	for (unsigned int i=0; i<sizeof(initVector);i++)
 		orig->addByte(initVector[i]);
 
 	result = bwt->transform(orig);
-	/*ASSERT_EQ(result->getSizeInBytes()+4,orig->getSizeInBytes());
+	ASSERT_EQ(result->getSizeInBytes()-4,orig->getSizeInBytes());
 	auto it = result->getIterator();
-	for (unsigned int i=0; i<sizeof(initVector);i++)
+	for (unsigned int i=0; i<sizeof(initVector);i++){
+		cerr << it[i+4] << endl;
 		ASSERT_EQ(it[i+4],expectedResultVector[i]);
-*/
+	}
+
+	it = result->getIterator();
+	// Verifico el número de columna original
+/*	for(int i=0;i<4;i++)
+		ASSERT_EQ(it[i],*((char *) (i +&row)));*/
+//		orig->addByte( *((char *) (i +&row)) );
+
 	delete bwt;
 	delete orig;
 	delete result;
