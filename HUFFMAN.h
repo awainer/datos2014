@@ -11,8 +11,8 @@
 #include <stdio.h>
 #include <string.h>
 #include "DataBlock.h"
-#include <vector>
 #include <algorithm>
+#include <list>
 
 typedef unsigned char BYTE;
 
@@ -20,65 +20,47 @@ typedef unsigned char BYTE;
 namespace std{
 
 struct Caracter{
-	BYTE cod;
-	int frec;
+	DataBlock * cod;
+	int longitud;
 };
 
 class NodoArbol{
 private:
-	BYTE caracter;
 	int peso;
-	class NodoArbol * derecha;
-	class NodoArbol * izquierda;
-	class NodoArbol * hijoDerecho;
-	class NodoArbol * hijoIzquierdo;
-
+	int cod;
+	NodoArbol*hijoDer;
+	NodoArbol*hijoIzq;
 public:
-	NodoArbol(BYTE caract, int frecuencia){caracter = caract; peso = frecuencia;derecha=NULL;
-	izquierda=NULL;hijoDerecho=NULL;hijoIzquierdo=NULL;};
-	NodoArbol(NodoArbol* nodoIzq, NodoArbol* nodoDer){peso = nodoIzq->getPeso()+nodoDer->getPeso();
-	caracter = '*';derecha=NULL;izquierda=NULL;hijoDerecho=NULL;hijoIzquierdo=NULL;};
-	virtual ~NodoArbol();
+	NodoArbol(int weight,int code){peso = weight; cod = code;hijoDer=NULL;hijoIzq=NULL;};
+	NodoArbol(int weight,NodoArbol*izq,NodoArbol*der){peso = weight; cod = 0;hijoIzq=izq;hijoDer=der;};
+	~NodoArbol();
 	int getPeso(){return peso;};
-	void setHojaDer(NodoArbol*hoja){derecha = hoja;};
-	class NodoArbol *getHojaDer(){return derecha;};
-	void setHojaIzq(NodoArbol*hoja){izquierda = hoja;};
-	class NodoArbol *getHojaIzq(){return izquierda;};
-
+	int getCode(){return cod;};
+	NodoArbol * derecha(){return hijoDer;};
+	NodoArbol * izquierda(){return hijoIzq;};
 };
 
 class Arbol{
 private:
 	NodoArbol * raiz;
-	NodoArbol * ultimaHoja;
-
 public:
-	Arbol(){raiz = NULL; ultimaHoja = NULL;};
-	virtual ~Arbol();
-	void armarArbol();
-	void agregarNodo(NodoArbol * nodoIzq, NodoArbol * nodoDer);
-	NodoArbol* buscarNodoMin();
-	void setearUltimaHoja(NodoArbol * hojaUltima){ultimaHoja = hojaUltima;};
-	NodoArbol* getUltimaHoja(){return ultimaHoja;};
-	void recorrerHojas();
-
+	Arbol(){raiz = NULL;};
+	~Arbol();
+	void ArmarArbol(list<NodoArbol*> hojas);
+	void generarCodigos(Caracter codigos[256]);
+	void borrar(NodoArbol * node);
+	NodoArbol * root(){return raiz;};
 };
 
 class HUFFMAN {
 private:
-	vector<Caracter> frecuencias;
-	Arbol * arbolHuff;
-	//bool CodeComparator(Caracter char1, Caracter char2);
-	void conectarHojas();
-	void armarArbol();
-
+	 Arbol * arbolHuff;
+	 Caracter codigos[256];
 public:
 	HUFFMAN();
 	virtual ~HUFFMAN();
-	bool Compress(DataBlock * data, int chars[256]);
+	DataBlock* Compress(DataBlock * data, int chars[256]);
 	bool decompress();
-	void recorrerHojas();
-
 };
 
 }

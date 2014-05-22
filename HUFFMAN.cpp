@@ -5,105 +5,96 @@
  *      Author: freakazoid
  */
 
-#include <string>
 #include <iostream>
-#include <algorithm>
-#include <vector>
-
 #include "HUFFMAN.h"
+#include <stdio.h>
+#include <string.h>
 #include "DataBlock.h"
+#include <algorithm>
+#include <list>
 
 
 namespace std{
 
 NodoArbol::~NodoArbol(){
-	//lala
+	delete hijoIzq;
+	delete hijoDer;
 }
 
-void HUFFMAN::recorrerHojas(){
-	cout << "HOlaaaaaaaaaa" << endl;
-	NodoArbol * nodoAux = arbolHuff->getUltimaHoja();
-	cout << (nodoAux != NULL) << endl;
-	while (nodoAux != NULL){
-		cerr << nodoAux->getPeso() << endl;
-		nodoAux = nodoAux->getHojaIzq();
-	}
-}
 
-NodoArbol * Arbol::buscarNodoMin(){
-
-	NodoArbol * nodoAux =  ultimaHoja;
-	while(nodoAux->getHojaIzq() != NULL && nodoAux->getPeso() > nodoAux->getHojaIzq()->getPeso()){
-			nodoAux = nodoAux->getHojaIzq();
-	}
-	return nodoAux;
-}
-
-void Arbol::agregarNodo(NodoArbol * nodoIzq, NodoArbol * nodoDer){
-	NodoArbol * nuevoNodo = new NodoArbol(nodoIzq,nodoDer);
-
-	if (nodoIzq->getHojaIzq() != NULL){
-		nodoIzq->getHojaIzq()->setHojaDer(nuevoNodo);
-	}
-	if (nodoDer->getHojaDer() != NULL){
-		nodoDer->getHojaDer()->setHojaIzq(nuevoNodo);
-	}
-	nuevoNodo->setHojaIzq(nodoIzq->getHojaIzq());
-	nuevoNodo->setHojaDer(nodoDer->getHojaDer());
-}
-
-Arbol::~Arbol(){
-	//lala
-}
-
-void HUFFMAN::armarArbol(){
-
-
-}
-
-void HUFFMAN::conectarHojas(){
-	vector<Caracter>::iterator it;
-
-	//seteo la primer hoja
-	it = frecuencias.begin();
-	NodoArbol * hojaAnterior = new NodoArbol(it->cod, it->frec);;
-
-	for (it = (frecuencias.begin()+1); it != frecuencias.end(); it++){
-		NodoArbol * nuevaHoja = new NodoArbol(it->cod, it->frec);
-
-		nuevaHoja->setHojaIzq(hojaAnterior);
-		hojaAnterior->setHojaDer(nuevaHoja);
-
-		hojaAnterior = nuevaHoja;
-	}
-	arbolHuff->setearUltimaHoja(hojaAnterior);
-
-}
-
-bool codeComparator(Caracter char1, Caracter char2){
-	if( char1.frec > char2.frec)
+int compareNodos(NodoArbol * nodo1, NodoArbol * nodo2){
+	if (nodo1->getPeso() > nodo2->getPeso())
 		return 1;
 	return 0;
 }
 
-bool HUFFMAN::Compress(DataBlock * data, int chars[256]){
+void Arbol::ArmarArbol(list<NodoArbol*> hojas){
+	NodoArbol * der;
+	NodoArbol * izq;
 
-	vector<Caracter>::iterator it;
-	it = frecuencias.begin();
+	if(hojas.size() == 0)
+		return; //error no puede entrar sin elementos
+
+	if(hojas.size() == 1)
+		raiz = hojas.back();
+
+	while(hojas.size() > 1){
+		hojas.sort(compareNodos);
+
+		der = hojas.back();
+		hojas.pop_back();
+
+		izq = hojas.back();
+		hojas.pop_back();
+
+		NodoArbol * nuevoNodo = new NodoArbol(izq->getPeso() + der->getPeso(),izq,der);
+
+		if(hojas.empty())
+			raiz = nuevoNodo;
+		else
+			hojas.push_back(nuevoNodo);
+	}
+	hojas.~list();
+}
+
+void Arbol::generarCodigos(Caracter codigos[256]){
+
+}
+
+void Arbol::borrar(NodoArbol * node){
+	if(node == NULL) return;
+	borrar(node->izquierda());
+	node->~NodoArbol();
+	borrar(node->derecha());
+}
+
+
+Arbol::~Arbol(){
+	borrar(raiz);
+}
+
+DataBlock* HUFFMAN::Compress(DataBlock * data, int chars[256]){
+	list<NodoArbol*> hojas;
+	DataBlock * output = new DataBlock();
+
 	for (int i = 0; i < 256 ; i++){
 		if (chars[i] != 0){
-			Caracter caract;
-			caract.cod = (BYTE)i;
-			caract.frec = chars[i];
-			it = frecuencias.insert(it,caract);
+			NodoArbol * nuevoNodo = new NodoArbol(chars[i],i);
+
+			hojas.push_back(nuevoNodo);
 		}
 	}
-	std::sort (frecuencias.begin(), frecuencias.end(), codeComparator);
-	conectarHojas();
-	return true;
+	arbolHuff->ArmarArbol(hojas);
+	arbolHuff->generarCodigos(codigos);
+	return output;
 }
 
 HUFFMAN::HUFFMAN() {
+
+	for (int i = 0; i < 256 ; i++){
+		codigos[i].cod = NULL;
+		codigos[i].longitud = 0;
+	}
 
 	arbolHuff = new Arbol();
 
