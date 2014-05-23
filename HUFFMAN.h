@@ -20,7 +20,7 @@ typedef unsigned char BYTE;
 namespace std{
 
 struct Caracter{
-	DataBlock * cod;
+	int cod[20];
 	int longitud;
 };
 
@@ -43,6 +43,7 @@ public:
 class Arbol{
 private:
 	NodoArbol * raiz;
+	void codear(NodoArbol * node, int * cont, int code[20], Caracter chars[256]);
 public:
 	Arbol(){raiz = NULL;};
 	~Arbol();
