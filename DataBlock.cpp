@@ -36,6 +36,20 @@ DataBlock::DataBlock(vector<unsigned char> * v,unsigned char remaining_bits){
 		this->data->push_back(0);
 }
 
+void DataBlock::addDataBlock(DataBlock* db) {
+	unsigned int bitsToAdd = db->getSizeInBits();
+	auto it = db->getIterator();
+	while(bitsToAdd > 8){
+		this->addByte(*it);
+		it++;
+		bitsToAdd = bitsToAdd - 8;
+	}
+	if(bitsToAdd){
+		unsigned char aux= *it >> (8 - bitsToAdd);
+		this->addBits(aux,bitsToAdd);
+	}
+}
+
 void DataBlock::initialize(){
 	this->remaining_bits_count=0;
 	unsigned char masks[] = {1,3,7,15,31,63,127,255};

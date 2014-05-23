@@ -116,6 +116,37 @@ TEST(DataBlockTest,deACinco){
 	delete block;
 }
 
+TEST(DataBlockTest,appendDB){
+	DataBlock * block1 = new DataBlock();
+	DataBlock * block2 = new DataBlock();
+	unsigned char aux= 0xFF;
+	block1->addBits(aux,5);
+	block2->addBits(aux,5);
+
+	block1->addDataBlock(block2);
+	ASSERT_EQ(block1->getSizeInBits(),10);
+	auto it = block1->getIterator();
+	ASSERT_EQ(*it,0xFF);
+	it++;
+	ASSERT_EQ(*it,0xC0);
+	delete block1;
+	delete block2;
+}
+
+TEST(DataBlockTest,appendDBToEmptyDB){
+	DataBlock * block1 = new DataBlock();
+	DataBlock * block2 = new DataBlock();
+	unsigned char aux= 0xFF;
+	block2->addBits(aux,5);
+
+	block1->addDataBlock(block2);
+	ASSERT_EQ(block1->getSizeInBits(),5);
+	auto it = block1->getIterator();
+	ASSERT_EQ(*it,0xF8);
+	delete block1;
+	delete block2;
+}
+
 }
 
 
