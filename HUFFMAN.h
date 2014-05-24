@@ -13,6 +13,7 @@
 #include "DataBlock.h"
 #include <algorithm>
 #include <list>
+#include <bitset>
 
 typedef unsigned char BYTE;
 
@@ -20,8 +21,8 @@ typedef unsigned char BYTE;
 namespace std{
 
 struct Caracter{
-	int cod[20];
-	int longitud;
+	unsigned char c;
+	vector<bool> code;
 };
 
 class NodoArbol{
@@ -57,6 +58,8 @@ class HUFFMAN {
 private:
 	 Arbol * arbolHuff;
 	 vector<bool> codigos[256];
+	 void encodeTable(DataBlock * dest);
+	 void canonical(vector<Caracter> vec);
 public:
 	HUFFMAN();
 	virtual ~HUFFMAN();

@@ -63,4 +63,28 @@ TEST(AAAHUFFMANTest,TestGenerarCodigos){
 	delete result;
 	delete huffman;
 }
+
+TEST(AAAHUFFMANTest,TestGenerarPrimerosCodigos){
+	HUFFMAN * huffman = new HUFFMAN();
+	int frecuencias[256];
+	DataBlock sarasa;
+	DataBlock * result;
+	for(int i = 0 ; i < 256 ; i++)
+				frecuencias[i] = 0;
+	frecuencias['A'] = 1;
+	frecuencias['B'] = 3;
+	frecuencias['C'] = 5;
+	result = huffman->Compress(&sarasa,frecuencias);
+
+	vector<bool> aux;
+	for(unsigned char i = 'A' ; i < 'D' ; i++){
+		aux =  huffman->getCodigo(i);
+		cerr << i << " ";
+		for (unsigned int j=0; j<aux.size();j++)
+			cerr << aux[j];
+		cerr << endl;
+	}
+	delete result;
+	delete huffman;
+}
 }
