@@ -38,6 +38,8 @@ public:
 	int getCode(){return cod;};
 	NodoArbol * derecha(){return hijoDer;};
 	NodoArbol * izquierda(){return hijoIzq;};
+	void setNodoIzquierda(NodoArbol * node);
+	void setNodoDerecha(NodoArbol * node);
 };
 
 class Arbol{
@@ -48,7 +50,7 @@ public:
 	Arbol(){raiz = NULL;};
 	~Arbol();
 	void ArmarArbol(list<NodoArbol*> hojas);
-	void borrar(NodoArbol * node);
+	void deleteRecursivo(NodoArbol* node);
 	NodoArbol * root(){return raiz;};
 };
 class HUFFMAN {

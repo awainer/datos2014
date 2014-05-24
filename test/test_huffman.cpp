@@ -37,10 +37,11 @@ namespace std{
 		 }
 }*/
 
-TEST(HUFFMANTest,TestGenerarCodigos){
+TEST(AAAHUFFMANTest,TestGenerarCodigos){
 	HUFFMAN * huffman = new HUFFMAN();
 	int frecuencias[256];
 	DataBlock sarasa;
+	DataBlock * result;
 	for(int i = 0 ; i < 65 ; i++)
 				frecuencias[i] = 0;
 	for(int i = 65 ; i < 95 ; i++){
@@ -49,7 +50,7 @@ TEST(HUFFMANTest,TestGenerarCodigos){
 				frecuencias[i] = 0;
 	}
 
-	huffman->Compress(&sarasa,frecuencias);
+	result = huffman->Compress(&sarasa,frecuencias);
 
 	vector<bool> aux;
 	for(unsigned char i = 65 ; i < 95 ; i++){
@@ -59,7 +60,7 @@ TEST(HUFFMANTest,TestGenerarCodigos){
 			cerr << aux[j];
 		cerr << endl;
 	}
-
+	delete result;
 	delete huffman;
 }
 }

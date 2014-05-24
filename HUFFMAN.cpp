@@ -13,32 +13,35 @@
 #include <algorithm>
 #include <list>
 
+namespace std {
 
-namespace std{
-
-NodoArbol::~NodoArbol(){
-	delete hijoIzq;
-	delete hijoDer;
+NodoArbol::~NodoArbol() {
+}
+void NodoArbol::setNodoIzquierda(NodoArbol* node) {
+	hijoIzq = node;
 }
 
+void NodoArbol::setNodoDerecha(NodoArbol* node) {
+	hijoDer = node;
+}
 
-int compareNodos(NodoArbol * nodo1, NodoArbol * nodo2){
+int compareNodos(NodoArbol * nodo1, NodoArbol * nodo2) {
 	if (nodo1->getPeso() > nodo2->getPeso())
 		return 1;
 	return 0;
 }
 
-void Arbol::ArmarArbol(list<NodoArbol*> hojas){
+void Arbol::ArmarArbol(list<NodoArbol*> hojas) {
 	NodoArbol * der;
 	NodoArbol * izq;
 
-	if(hojas.size() == 0)
+	if (hojas.size() == 0)
 		return; //error no puede entrar sin elementos
 
-	if(hojas.size() == 1)
+	if (hojas.size() == 1)
 		raiz = hojas.back();
 
-	while(hojas.size() > 1){
+	while (hojas.size() > 1) {
 		hojas.sort(compareNodos);
 
 		der = hojas.back();
@@ -47,9 +50,10 @@ void Arbol::ArmarArbol(list<NodoArbol*> hojas){
 		izq = hojas.back();
 		hojas.pop_back();
 
-		NodoArbol * nuevoNodo = new NodoArbol(izq->getPeso() + der->getPeso(),izq,der);
+		NodoArbol * nuevoNodo = new NodoArbol(izq->getPeso() + der->getPeso(),
+				izq, der);
 
-		if(hojas.empty())
+		if (hojas.empty())
 			raiz = nuevoNodo;
 		else
 			hojas.push_back(nuevoNodo);
@@ -57,26 +61,35 @@ void Arbol::ArmarArbol(list<NodoArbol*> hojas){
 	hojas.~list();
 }
 
+void Arbol::deleteRecursivo(NodoArbol* node) {
+//http://stackoverflow.com/questions/8062080/deleting-the-entire-binary-search-tree-at-once
+	if (node != NULL) {
 
-void Arbol::borrar(NodoArbol * node){
-	if(node == NULL) return;
-	borrar(node->izquierda());
-	delete node;
-	borrar(node->derecha());
+		this->deleteRecursivo(node->derecha());
+		this->deleteRecursivo(node->izquierda());
+
+		if (node->derecha() != NULL) {
+			node->setNodoDerecha(NULL);
+		}
+		if (node->izquierda() != NULL) {
+			node->setNodoIzquierda(NULL);
+		}
+		delete node;
+	}
+
 }
 
-
-Arbol::~Arbol(){
-	borrar(raiz);
+Arbol::~Arbol() {
+	deleteRecursivo(raiz);
 }
 
-DataBlock* HUFFMAN::Compress(DataBlock * data, int chars[256]){
+DataBlock* HUFFMAN::Compress(DataBlock * data, int chars[256]) {
 	list<NodoArbol*> hojas;
 	DataBlock * output = new DataBlock();
 
-	for (int i = 0; i < 256 ; i++){
-		if (chars[i] != 0){
-			NodoArbol * nuevoNodo = new NodoArbol(chars[i],i);
+	for (int i = 0; i < 256; i++) {
+		if (chars[i] != 0) {
+			NodoArbol * nuevoNodo = new NodoArbol(chars[i], i);
 
 			hojas.push_back(nuevoNodo);
 		}
@@ -87,9 +100,9 @@ DataBlock* HUFFMAN::Compress(DataBlock * data, int chars[256]){
 
 	vector<bool> code;
 	auto it = data->getIterator();
-	for(unsigned int i=0; i<data->getSizeInBytes();i++){
+	for (unsigned int i = 0; i < data->getSizeInBytes(); i++) {
 		code = this->codigos[*it];
-		for (unsigned short int j=0; j<code.size();j++)
+		for (unsigned short int j = 0; j < code.size(); j++)
 			output->addBoolean(code[j]);
 		it++;
 	}
@@ -101,33 +114,32 @@ HUFFMAN::HUFFMAN() {
 }
 
 HUFFMAN::~HUFFMAN() {
-	// TODO Auto-generated destructor stub
+	delete this->arbolHuff;
 }
 
 // Me parece que es mas correcto que quien genere los códigos sea Huffman.
 void HUFFMAN::generarCodigos() {
 	vector<bool> code;
-	this->recorrerArbol(this->arbolHuff->root(),code);
+	this->recorrerArbol(this->arbolHuff->root(), code);
 }
-
 
 void HUFFMAN::recorrerArbol(NodoArbol* node, vector<bool> code) {
 	// Estamos en una hoja
-	if(node->derecha() == NULL && node->izquierda() == NULL){
+	if (node->derecha() == NULL && node->izquierda() == NULL) {
 		this->codigos[node->getCode()] = code;
 	}
 	//Proceso izquierda
-	if(node->izquierda()){
+	if (node->izquierda()) {
 		vector<bool> cizq = code;
 		cizq.push_back(1);
-		recorrerArbol(node->izquierda(),cizq);
+		recorrerArbol(node->izquierda(), cizq);
 	}
 
-	if(node->derecha()){
+	if (node->derecha()) {
 		//Proceso derecha
 		vector<bool> cder = code;
 		cder.push_back(0);
-		recorrerArbol(node->derecha(),cder);
+		recorrerArbol(node->derecha(), cder);
 	}
 }
 
