@@ -22,7 +22,8 @@ namespace std{
 
 struct Caracter{
 	unsigned char c;
-	vector<bool> code;
+	//vector<bool> code;
+	unsigned int code_lenght;
 };
 
 class NodoArbol{
@@ -64,6 +65,7 @@ public:
 	HUFFMAN();
 	virtual ~HUFFMAN();
 	DataBlock* Compress(DataBlock * data, int chars[256]);
+	DataBlock* decompress(DataBlock * data);
 	void generarCodigos();
 	vector<bool> getCodigo(unsigned char c);
 	void recorrerArbol(NodoArbol * node, vector<bool> code);

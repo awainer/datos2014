@@ -12,7 +12,7 @@
 #include "DataBlock.h"
 #include <algorithm>
 #include <list>
-//#include "util/bitsetaux.cpp"
+#include "util/bitsetaux.cpp"
 namespace std {
 
 NodoArbol::~NodoArbol() {
@@ -99,7 +99,7 @@ DataBlock* HUFFMAN::Compress(DataBlock * data, int chars[256]) {
 	this->generarCodigos();
 
 	//encode table
-	this->encodeTable(data);
+	this->encodeTable(output);
 
 	//encode data
 	vector<bool> code;
@@ -123,9 +123,9 @@ HUFFMAN::~HUFFMAN() {
 
 
 bool carComp(Caracter c1, Caracter c2){
-										if (c1.code.size() < c2.code.size())
+										if (c1.code_lenght < c2.code_lenght)
 											return true;
-										if (c1.code.size() > c2.code.size())
+										if (c1.code_lenght > c2.code_lenght)
 											return false;
 										if (c1.c < c2.c)
 											return true;
@@ -142,45 +142,81 @@ void HUFFMAN::generarCodigos() {
 	vector<Caracter> aux_sort = vector<Caracter>(256);
 	for(unsigned short int i=0;i<256;i++){
 		aux_sort[i].c=i;
-		aux_sort[i].code=this->codigos[i];
+		aux_sort[i].code_lenght=this->codigos[i].size();
 	}
 	sort(aux_sort.begin(),aux_sort.end(), carComp);
 	this->canonical(aux_sort);
 }
 
 void HUFFMAN::canonical(vector<Caracter> characters) {
-	unsigned int lenght=characters[0].code.size();
+	/*for(int i=0;i<256;i++)
+		if (characters[i].code_lenght!=0)
+			cerr << "Canonical: " << (int)characters[i].c << " long" << characters[i].code_lenght << endl;*/
+	unsigned int lenght=characters[0].code_lenght;
 	bitset<32> last_code=0;
 	vector<bool> aux_code;
 
-	// Asigno el primer código, todos ceros.
+	int j=0;
+	//Busco el primer no cero.
+	while(lenght==0){
+		lenght=characters[j].code_lenght;
+		j++;
+	}
+	j--;
 	for(unsigned int i=0;i<lenght;i++)
 		aux_code.push_back(0);
-	this->codigos[characters[0].c]=aux_code;
-
-	for(unsigned short int i=1; i<255; i++){
+	this->codigos[characters[j].c]=aux_code;
+	//cerr << "Primer char con codigo " << (int)characters[j].c <<  " largo " << aux_code.size() <<  endl;
+	j++;
+	for(; j<256; j++){
 		aux_code.clear();
-		if(characters[i].code.size()>0){
-			//increment(last_code);
-			if(characters[i].code.size() != lenght){
-				unsigned short int zeros_to_append=characters[i].code.size() - lenght;
+		if(characters[j].code_lenght>0){
+			last_code=increment(last_code);
+			//cerr << last_code << endl;
+			if(characters[j].code_lenght != lenght){
+				unsigned short int zeros_to_append=characters[j].code_lenght - lenght;
 				last_code = last_code << zeros_to_append;
-				lenght = characters[i].code.size();
+				lenght = characters[j].code_lenght;
 			}
 
-			for(unsigned short int j=0;j<lenght;j++)
-				aux_code.push_back(last_code[j]);
-			this->codigos[characters[0].c]=aux_code;
+			for(unsigned short int i=0;i<lenght;i++)
+				aux_code.push_back(last_code[i]);
+			this->codigos[characters[j].c]=aux_code;
+			//cerr << "Canonical-code: " << (int)characters[i].c << " long" << characters[i].code_lenght << endl;
 		}
 	}
 }
 
 void HUFFMAN::encodeTable(DataBlock* dest) {
 	char aux;
-	for (unsigned int i=0; i<255; i++){
+	for (unsigned int i=0; i<256; i++){
 		aux = this->codigos[i].size();
+		/*if(aux>0)
+			cerr << "Encodeo tabla, caracter " << i << " long " << (int)aux << endl;*/
 		dest->addByte(aux);
 	}
+}
+
+DataBlock* HUFFMAN::decompress(DataBlock* data) {
+	DataBlock * result = new DataBlock();
+	auto it = data->getIterator();
+	vector<Caracter> aux;
+	Caracter c;
+	for(int i=0; i<256; i++){
+		c.c = i;
+		c.code_lenght=0;
+		if(*it > 0){
+		for(int j=0;j<*it;j++)
+			c.code_lenght++;
+		}
+		//cerr << "Car " << (int)c.c << "long  " << (int)it[i] << endl;
+		aux.push_back(c);
+		it++;
+	}
+	sort(aux.begin(),aux.end(), carComp);
+	this->canonical(aux);
+
+	return result;
 }
 
 void HUFFMAN::recorrerArbol(NodoArbol* node, vector<bool> code) {
