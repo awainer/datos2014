@@ -57,38 +57,6 @@ void Arbol::ArmarArbol(list<NodoArbol*> hojas){
 	hojas.~list();
 }
 
-void Arbol::codear(NodoArbol * node, int * cont, int code[20], Caracter chars[256]){
-	if(node->derecha() == NULL && node->izquierda() == NULL){
-		for(int i = 0; i < *cont ; i++)
-			chars[node->getCode()].cod[i] = code[i];
-		chars[node->getCode()].longitud = (*cont);
-		(*cont)--;
-	}
-	else if ( node == NULL) return;
-	else{
-		code[(*cont)] = 0;
-		(*cont)++;
-		codear(node->izquierda(),cont,code,chars);
-		code[(*cont)] = 1;
-		(*cont)++;
-		codear(node->derecha(),cont,code,chars);
-		(*cont)--;
-
-	}
-
-}
-
-void Arbol::generarCodigos(Caracter codigos[256]){
-	int cont = 0;
-	int code[20];
-
-	for (int i = 0 ; i < 20 ; i++){
-		code[i] = 0;
-	}
-
-	codear(raiz,&cont,code,codigos);
-}
-
 
 void Arbol::borrar(NodoArbol * node){
 	if(node == NULL) return;
@@ -114,24 +82,57 @@ DataBlock* HUFFMAN::Compress(DataBlock * data, int chars[256]){
 		}
 	}
 	arbolHuff->ArmarArbol(hojas);
-	arbolHuff->generarCodigos(codigos);
+	//arbolHuff->generarCodigos(&this->codigos);
+	this->generarCodigos();
+
+	vector<bool> code;
+	auto it = data->getIterator();
+	for(unsigned int i=0; i<data->getSizeInBytes();i++){
+		code = this->codigos[*it];
+		for (unsigned short int j=0; j<code.size();j++)
+			output->addBoolean(code[j]);
+		it++;
+	}
 	return output;
 }
 
 HUFFMAN::HUFFMAN() {
-
-	for (int i = 0; i < 256 ; i++){
-		for(int j = 0 ; j < 20 ; j++)
-			codigos[i].cod[j] = 0;
-		codigos[i].longitud = 0;
-	}
-
 	arbolHuff = new Arbol();
-
 }
 
 HUFFMAN::~HUFFMAN() {
 	// TODO Auto-generated destructor stub
+}
+
+// Me parece que es mas correcto que quien genere los códigos sea Huffman.
+void HUFFMAN::generarCodigos() {
+	vector<bool> code;
+	this->recorrerArbol(this->arbolHuff->root(),code);
+}
+
+
+void HUFFMAN::recorrerArbol(NodoArbol* node, vector<bool> code) {
+	// Estamos en una hoja
+	if(node->derecha() == NULL && node->izquierda() == NULL){
+		this->codigos[node->getCode()] = code;
+	}
+	//Proceso izquierda
+	if(node->izquierda()){
+		vector<bool> cizq = code;
+		cizq.push_back(1);
+		recorrerArbol(node->izquierda(),cizq);
+	}
+
+	if(node->derecha()){
+		//Proceso derecha
+		vector<bool> cder = code;
+		cder.push_back(0);
+		recorrerArbol(node->derecha(),cder);
+	}
+}
+
+vector<bool> HUFFMAN::getCodigo(unsigned char c) {
+	return this->codigos[c];
 }
 
 }

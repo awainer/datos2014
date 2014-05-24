@@ -43,24 +43,25 @@ public:
 class Arbol{
 private:
 	NodoArbol * raiz;
-	void codear(NodoArbol * node, int * cont, int code[20], Caracter chars[256]);
+//	void codear(NodoArbol * node, vector<bool> code);
 public:
 	Arbol(){raiz = NULL;};
 	~Arbol();
 	void ArmarArbol(list<NodoArbol*> hojas);
-	void generarCodigos(Caracter codigos[256]);
 	void borrar(NodoArbol * node);
 	NodoArbol * root(){return raiz;};
 };
-
 class HUFFMAN {
 private:
 	 Arbol * arbolHuff;
-	 Caracter codigos[256];
+	 vector<bool> codigos[256];
 public:
 	HUFFMAN();
 	virtual ~HUFFMAN();
 	DataBlock* Compress(DataBlock * data, int chars[256]);
+	void generarCodigos();
+	vector<bool> getCodigo(unsigned char c);
+	void recorrerArbol(NodoArbol * node, vector<bool> code);
 	bool decompress();
 };
 

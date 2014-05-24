@@ -24,6 +24,7 @@ public:
 	//void addBytes(unsigned char * data, unsigned long int count);
 	void addByte(unsigned char data);
 	void addBits(unsigned char data, unsigned char count);
+	void addBoolean(bool b);
 	void addDataBlock(DataBlock * db);
 	unsigned long int getSizeInBytes();
 	unsigned long int getSizeInBits();

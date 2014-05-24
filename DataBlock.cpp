@@ -50,6 +50,13 @@ void DataBlock::addDataBlock(DataBlock* db) {
 	}
 }
 
+void DataBlock::addBoolean(bool b) {
+	if(b)
+		this->addBits(0xFF,1);
+	else
+		this->addBits(0x00,1);
+}
+
 void DataBlock::initialize(){
 	this->remaining_bits_count=0;
 	unsigned char masks[] = {1,3,7,15,31,63,127,255};
