@@ -42,6 +42,7 @@ public:
 	NodoArbol * izquierda(){return hijoIzq;};
 	void setNodoIzquierda(NodoArbol * node);
 	void setNodoDerecha(NodoArbol * node);
+	bool esHoja(){if (peso == -1) return 0;return 1;};
 };
 
 class Arbol{
@@ -55,6 +56,7 @@ public:
 	void deleteRecursivo(NodoArbol* node);
 	NodoArbol * root(){return raiz;};
 	void setRoot(NodoArbol * root){raiz = root;};
+	void insertarHoja(int c, vector<bool> code);
 	NodoArbol * nodoIzqDe(NodoArbol * nodo){return nodo->izquierda();};
 	NodoArbol * nodoDerDe(NodoArbol * nodo){return nodo->derecha();};
 };

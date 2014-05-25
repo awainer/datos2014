@@ -61,6 +61,33 @@ void Arbol::ArmarArbol(list<NodoArbol*> hojas) {
 	hojas.~list();
 }
 
+void Arbol::insertarHoja(int c, vector<bool> code){
+	NodoArbol * nodoAux = raiz ;
+	NodoArbol * padre;
+	bool lado;
+	for(unsigned int j = 0 ; j < code.size() ; j++){
+		padre = nodoAux;
+		if (code[j] == 0){
+			nodoAux = nodoAux->izquierda();
+			lado = 0;
+		}
+		else{
+			nodoAux = nodoAux->derecha();
+			lado = 1;
+		}
+
+		if ( nodoAux == NULL && j != (code.size()-1))
+			nodoAux = new NodoArbol(-1,-1);
+		if ( nodoAux == NULL && j == (code.size()-1))
+			nodoAux = new NodoArbol(j,c);
+
+		if (lado)
+			padre->setNodoDerecha(nodoAux);
+		else
+			padre->setNodoIzquierda(nodoAux);
+	}
+}
+
 void Arbol::deleteRecursivo(NodoArbol* node) {
 //http://stackoverflow.com/questions/8062080/deleting-the-entire-binary-search-tree-at-once
 	if (node != NULL) {
@@ -220,7 +247,7 @@ DataBlock* HUFFMAN::decompress(DataBlock* data) {
 
 	unsigned char mask;
 	NodoArbol * nodoAux = arbolHuff->root();
-	for( unsigned int i=0; i < data->getSizeInBytes(); i++){
+	for( unsigned int i = 256; i < data->getSizeInBytes(); i++){
 		mask = 128; // 10000000 en binario
 		for(unsigned short int j=0;j<8;j++){
 			if( (*it & mask) > 0){
@@ -229,7 +256,7 @@ DataBlock* HUFFMAN::decompress(DataBlock* data) {
 			else{
 				nodoAux = arbolHuff->nodoIzqDe(nodoAux); // era un 0
 			}
-			if (nodoAux->getPeso() != -1){
+			if (nodoAux->esHoja()){
 				result->addByte((unsigned char)nodoAux->getCode());
 				nodoAux = arbolHuff->root();
 			}
@@ -266,38 +293,12 @@ vector<bool> HUFFMAN::getCodigo(unsigned char c) {
 	return this->codigos[c];
 }
 
-void HUFFMAN::insertarHoja(int c, vector<bool> code){
-	NodoArbol * nodoAux = arbolHuff->root() ;
-	NodoArbol * padre;
-	bool lado;
-	for(unsigned int j = 0 ; j < code.size() ; j++){
-		padre = nodoAux;
-		if (code[j] == 0){
-			nodoAux = nodoAux->izquierda();
-			lado = 0;
-		}
-		else{
-			nodoAux = nodoAux->derecha();
-			lado = 1;
-		}
-
-		if ( nodoAux == NULL && j != (code.size()-1))
-			nodoAux = new NodoArbol(-1,-1);
-		if ( nodoAux == NULL && j == (code.size()-1))
-			nodoAux = new NodoArbol(j,c);
-
-		if (lado)
-			padre->setNodoDerecha(nodoAux);
-		else
-			padre->setNodoIzquierda(nodoAux);
-	}
-}
 
 void HUFFMAN::reconstruirArbol(){
 	arbolHuff->setRoot(new NodoArbol(0,NULL,NULL));
 	for(int i = 0 ; i < 256 ; i++){
 		 if (codigos[i].size() > 0){
-			 insertarHoja(i,codigos[i]);
+			 arbolHuff->insertarHoja(i,codigos[i]);
 		 }
 	}
 }
