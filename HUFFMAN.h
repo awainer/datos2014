@@ -55,6 +55,8 @@ public:
 	void deleteRecursivo(NodoArbol* node);
 	NodoArbol * root(){return raiz;};
 	void setRoot(NodoArbol * root){raiz = root;};
+	NodoArbol * nodoIzqDe(NodoArbol * nodo){return nodo->izquierda();};
+	NodoArbol * nodoDerDe(NodoArbol * nodo){return nodo->derecha();};
 };
 class HUFFMAN {
 private:

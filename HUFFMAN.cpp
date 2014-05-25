@@ -218,6 +218,26 @@ DataBlock* HUFFMAN::decompress(DataBlock* data) {
 
 	reconstruirArbol();
 
+	unsigned char mask;
+	NodoArbol * nodoAux = arbolHuff->root();
+	for( unsigned int i=0; i < data->getSizeInBytes(); i++){
+		mask = 128; // 10000000 en binario
+		for(unsigned short int j=0;j<8;j++){
+			if( (*it & mask) > 0){
+				nodoAux = arbolHuff->nodoDerDe(nodoAux); // era un 1
+			}
+			else{
+				nodoAux = arbolHuff->nodoIzqDe(nodoAux); // era un 0
+			}
+			if (nodoAux->getPeso() != -1){
+				result->addByte((unsigned char)nodoAux->getCode());
+				nodoAux = arbolHuff->root();
+			}
+			mask = mask >> 1;
+		}
+		it++;
+	}
+
 
 	return result;
 }
