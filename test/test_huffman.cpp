@@ -140,4 +140,35 @@ TEST(AAAHUFFMANTest,TestEncodeTable){
 }
 
 
+TEST(AAAHUFFMANTest,TestCompressAndDecompressRandomData){
+//	cerr << "GAROLA" << vector_bool_to_string(vector<bool>(1010)) << endl;
+	HUFFMAN * huffman1 = new HUFFMAN();
+	DataBlock * orig, * compressed, *decompressed;
+	orig = new DataBlock();
+
+	unsigned char c;
+	int	frecs[256];
+	for(int i=0;i<256;i++)
+		frecs[i]=0;
+	for(int i=0;i<2000;i++){
+		c = rand() % 100;
+		frecs[c]+=1;
+		orig->addByte(c);
+	}
+
+	compressed = huffman1->Compress(orig,frecs);
+	decompressed = huffman1->decompress(compressed);
+
+	ASSERT_EQ(orig->getSizeInBytes(),decompressed->getSizeInBytes());
+	auto it1 = orig->getIterator();
+	auto it2 = decompressed->getIterator();
+
+	for(unsigned int i=0; i< orig->getSizeInBytes(); i++){
+		ASSERT_EQ(it1[i],it2[i]);
+	}
+	delete orig;
+	delete huffman1;
+	delete compressed;
+	delete decompressed;
+}
 }
