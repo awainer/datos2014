@@ -42,7 +42,7 @@ public:
 	NodoArbol * izquierda(){return hijoIzq;};
 	void setNodoIzquierda(NodoArbol * node);
 	void setNodoDerecha(NodoArbol * node);
-	bool esHoja(){if (peso == -1) return 0;return 1;};
+	bool esHoja(){if (hijoDer == NULL && hijoIzq == NULL) return 1;return 0;};
 };
 
 class Arbol{
@@ -66,7 +66,6 @@ private:
 	 vector<bool> codigos[256];
 	 void encodeTable(DataBlock * dest);
 	 void canonical(vector<Caracter> vec);
-	 void insertarHoja(int c, vector<bool> code);
 public:
 	HUFFMAN();
 	virtual ~HUFFMAN();
