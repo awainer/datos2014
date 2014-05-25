@@ -54,6 +54,7 @@ public:
 	void ArmarArbol(list<NodoArbol*> hojas);
 	void deleteRecursivo(NodoArbol* node);
 	NodoArbol * root(){return raiz;};
+	void setRoot(NodoArbol * root){raiz = root;};
 };
 class HUFFMAN {
 private:
@@ -61,6 +62,7 @@ private:
 	 vector<bool> codigos[256];
 	 void encodeTable(DataBlock * dest);
 	 void canonical(vector<Caracter> vec);
+	 void insertarHoja(int c, vector<bool> code);
 public:
 	HUFFMAN();
 	virtual ~HUFFMAN();
@@ -69,6 +71,7 @@ public:
 	void generarCodigos();
 	vector<bool> getCodigo(unsigned char c);
 	void recorrerArbol(NodoArbol * node, vector<bool> code);
+	void reconstruirArbol();
 	bool decompress();
 };
 

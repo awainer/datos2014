@@ -216,6 +216,9 @@ DataBlock* HUFFMAN::decompress(DataBlock* data) {
 	sort(aux.begin(),aux.end(), carComp);
 	this->canonical(aux);
 
+	reconstruirArbol();
+
+
 	return result;
 }
 
@@ -241,6 +244,42 @@ void HUFFMAN::recorrerArbol(NodoArbol* node, vector<bool> code) {
 
 vector<bool> HUFFMAN::getCodigo(unsigned char c) {
 	return this->codigos[c];
+}
+
+void HUFFMAN::insertarHoja(int c, vector<bool> code){
+	NodoArbol * nodoAux = arbolHuff->root() ;
+	NodoArbol * padre;
+	bool lado;
+	for(unsigned int j = 0 ; j < code.size() ; j++){
+		padre = nodoAux;
+		if (code[j] == 0){
+			nodoAux = nodoAux->izquierda();
+			lado = 0;
+		}
+		else{
+			nodoAux = nodoAux->derecha();
+			lado = 1;
+		}
+
+		if ( nodoAux == NULL && j != (code.size()-1))
+			nodoAux = new NodoArbol(-1,-1);
+		if ( nodoAux == NULL && j == (code.size()-1))
+			nodoAux = new NodoArbol(j,c);
+
+		if (lado)
+			padre->setNodoDerecha(nodoAux);
+		else
+			padre->setNodoIzquierda(nodoAux);
+	}
+}
+
+void HUFFMAN::reconstruirArbol(){
+	arbolHuff->setRoot(new NodoArbol(0,NULL,NULL));
+	for(int i = 0 ; i < 256 ; i++){
+		 if (codigos[i].size() > 0){
+			 insertarHoja(i,codigos[i]);
+		 }
+	}
 }
 
 }
