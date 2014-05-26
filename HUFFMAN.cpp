@@ -58,7 +58,8 @@ void Arbol::ArmarArbol(list<NodoArbol*> hojas) {
 		else
 			hojas.push_back(nuevoNodo);
 	}
-	hojas.~list();
+	//hojas.~list();
+	//delete hojas;
 }
 
 void Arbol::insertarHoja(int c, vector<bool> code){
@@ -127,9 +128,11 @@ DataBlock* HUFFMAN::Compress(DataBlock * data, int chars[256]) {
 		}
 	}
 	arbolHuff->ArmarArbol(hojas);
+	hojas.clear();
+
 	//arbolHuff->generarCodigos(&this->codigos);
 	this->generarCodigos();
-	delete this->arbolHuff;
+	//delete this->arbolHuff;
 	//encode table
 	this->encodeTable(output);
 
@@ -150,7 +153,7 @@ HUFFMAN::HUFFMAN() {
 }
 
 HUFFMAN::~HUFFMAN() {
-	//delete this->arbolHuff;
+	delete this->arbolHuff;
 }
 
 
