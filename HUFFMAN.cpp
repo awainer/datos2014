@@ -193,11 +193,13 @@ void HUFFMAN::canonical(vector<Caracter> characters) {
 	for(unsigned int i=0;i<lenght;i++)
 		aux_code.push_back(0);
 	this->codigos[characters[j].c]=aux_code;
-	//cerr << "Primer char con codigo " << (int)characters[j].c <<  " largo " << aux_code.size() <<  endl;
+	cerr << "Primer char con codigo " << (int)characters[j].c <<  " largo " << aux_code.size() <<  endl;
 	j++;
+//	cerr << last_code << endl;
 	for(; j<256; j++){
 		aux_code.clear();
 		if(characters[j].code_lenght>0){
+
 			last_code=increment(last_code);
 			//cerr << last_code << endl;
 			if(characters[j].code_lenght != lenght){
@@ -205,11 +207,19 @@ void HUFFMAN::canonical(vector<Caracter> characters) {
 				last_code = last_code << zeros_to_append;
 				lenght = characters[j].code_lenght;
 			}
-
-			for(unsigned short int i=0;i<lenght;i++)
+			/*cerr << "last code" << endl;
+			cerr << last_code[1];
+			cerr << last_code[0] << endl;
+			cerr << "LENGHT"<< lenght << endl;
+*/
+			for(short int i=lenght-1;i>=0;i--){
+				//cerr << i << endl;
 				aux_code.push_back(last_code[i]);
+			}
+
+
 			this->codigos[characters[j].c]=aux_code;
-			//cerr << "Canonical-code: " << (int)characters[i].c << " long" << characters[i].code_lenght << endl;
+			//cerr << "Canonical-code: " << (int)characters[j].c << " long" << characters[j].code_lenght << endl;
 		}
 	}
 }

@@ -4,68 +4,8 @@
 #include "../util/bitsetaux.cpp"
 
 namespace std{
-/*TEST(HUFFMANtest, generarCodigos) {
-	list<NodoArbol*> hojas;
-		Arbol * huff = new Arbol();
-		Caracter chars[256];
 
-		for (int i = 0 ; i < 256 ; i++){
-			chars[i].longitud = 0;
-		}
 
-		for(int i = 65 ; i < 95 ; i++){
-			NodoArbol * nuevoNodo = new NodoArbol(i*3,i);
-
-			hojas.push_back(nuevoNodo);
-		}
-
-		 for (std::list<NodoArbol*>::iterator it=hojas.begin(); it != hojas.end(); ++it)
-		    std::cout << ' ' << (*it)->getPeso();
-
-		 huff->ArmarArbol(hojas);
-
-		 huff->generarCodigos(chars);
-
-		 cout << endl;
-		 for (int i = 0 ; i < 256 ; i++){
-			 if(chars[i].longitud != 0 ){
-				cout << (char)i << " Codigo: ";
-		 		for (int j = 0 ; j < chars[i].longitud ; j++)
-		 			cout << chars[i].cod[j];
-		 		cout << endl;
-			 }
-		 }
-}*/
-
-TEST(AAAHUFFMANTest,TestGenerarCodigos){
-	HUFFMAN * huffman = new HUFFMAN();
-	int frecuencias[256];
-	DataBlock sarasa;
-	DataBlock * result;
-	for(int i = 0 ; i < 65 ; i++)
-				frecuencias[i] = 0;
-	for(int i = 65 ; i < 95 ; i++){
-				frecuencias[i] = 3*i;
-	for(int i = 95 ; i < 256 ; i++)
-				frecuencias[i] = 0;
-	}
-
-	result = huffman->Compress(&sarasa,frecuencias);
-
-	vector<bool> aux;
-	/*for(unsigned char i = 65 ; i < 95 ; i++){
-		aux =  huffman->getCodigo(i);
-		cerr << i << " ";
-		for (unsigned int j=0; j<aux.size();j++)
-			cerr << aux[j];
-		cerr << endl;
-	}*/
-	ASSERT_EQ(huffman->getCodigo(65).size(),5);
-	ASSERT_EQ(huffman->getCodigo(94).size(),4);
-	delete result;
-	delete huffman;
-}
-/*
 TEST(AAAHUFFMANTest,TestGenerarPrimerosCodigos){
 	HUFFMAN * huffman = new HUFFMAN();
 	int frecuencias[256];
@@ -73,23 +13,41 @@ TEST(AAAHUFFMANTest,TestGenerarPrimerosCodigos){
 	DataBlock * result;
 	for(int i = 0 ; i < 256 ; i++)
 				frecuencias[i] = 0;
-	frecuencias['A'] = 1;
-	frecuencias['B'] = 3;
-	frecuencias['C'] = 5;
+	frecuencias['A'] = 4;
+	frecuencias['B'] = 2;
+	frecuencias['C'] = 1;
 	result = huffman->Compress(&sarasa,frecuencias);
 
-	vector<bool> aux;
-	for(unsigned char i = 'A' ; i < 'D' ; i++){
-		aux =  huffman->getCodigo(i);
-		cerr << i << " ";
-		for (unsigned int j=0; j<aux.size();j++)
-			cerr << aux[j];
+	vector<bool> expectedA;
+	vector<bool> expectedB;
+	vector<bool> expectedC;
+
+	vector<bool> codes[3];
+	codes[0] = huffman->getCodigo('A');
+	codes[1] = huffman->getCodigo('B');
+	codes[2] = huffman->getCodigo('C');
+
+	for(int i=0;i<3;i++){
+		cerr << "Code: size" << codes[i].size() << " ";
+		for(int j=0;j<codes[i].size();j++)
+			cerr << codes[i][j];
 		cerr << endl;
 	}
+
+	expectedA.push_back(0);
+	expectedB.push_back(1);
+	expectedB.push_back(0);
+	expectedC.push_back(1);
+	expectedC.push_back(1);
+
+	ASSERT_EQ(huffman->getCodigo('A'),expectedA);   // 0
+	ASSERT_EQ(huffman->getCodigo('B'),expectedB);   // 10
+	ASSERT_EQ(huffman->getCodigo('C'),expectedC);   // 11
+
 	delete result;
 	delete huffman;
 }
-*/
+
 string vector_bool_to_string(vector<bool> b){
 	string  result;
 
@@ -100,7 +58,7 @@ string vector_bool_to_string(vector<bool> b){
 			result.push_back('0');
 	return result;
 }
-
+/*
 TEST(AAAHUFFMANTest,TestEncodeTable){
 //	cerr << "GAROLA" << vector_bool_to_string(vector<bool>(1010)) << endl;
 	HUFFMAN * huffman1 = new HUFFMAN();
@@ -117,7 +75,7 @@ TEST(AAAHUFFMANTest,TestEncodeTable){
 	}
 
     compressed = huffman1->Compress(&sarasa,frecuencias);
-
+*/
     /*auto it = compressed->getIterator();
     for(int i=0;i<256;i++){
     	cerr << "Bloque comprimido, byte " << i << " " << (int) *it << endl;
@@ -125,7 +83,7 @@ TEST(AAAHUFFMANTest,TestEncodeTable){
     }*/
 
 	// Un nuevo huffman
-	huffman2 = new HUFFMAN();
+/*	huffman2 = new HUFFMAN();
 	decompressed = huffman2->decompress(compressed);
 
 	for(int i = 65 ; i < 95 ; i++){
@@ -137,11 +95,11 @@ TEST(AAAHUFFMANTest,TestEncodeTable){
 	delete decompressed;
 	delete huffman1;
 	delete huffman2;
-}
+}*/
 
 
-TEST(AAAHUFFMANTest,TestCompressAndDecompressRandomData){
-//	cerr << "GAROLA" << vector_bool_to_string(vector<bool>(1010)) << endl;
+/*TEST(AAAHUFFMANTest,TestCompressAndDecompressRandomData){
+
 	HUFFMAN * huffman1 = new HUFFMAN();
 	DataBlock * orig, * compressed, *decompressed;
 	orig = new DataBlock();
@@ -150,7 +108,7 @@ TEST(AAAHUFFMANTest,TestCompressAndDecompressRandomData){
 	int	frecs[256];
 	for(int i=0;i<256;i++)
 		frecs[i]=0;
-	for(int i=0;i<2000;i++){
+	for(int i=0;i<20;i++){
 		c = rand() % 100;
 		frecs[c]+=1;
 		orig->addByte(c);
@@ -170,5 +128,5 @@ TEST(AAAHUFFMANTest,TestCompressAndDecompressRandomData){
 	delete huffman1;
 	delete compressed;
 	delete decompressed;
-}
+}*/
 }

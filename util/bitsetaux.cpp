@@ -20,8 +20,9 @@ namespace std{
 
 template <size_t N>
 bitset<N> increment ( bitset<N> in ) {
+
 //  add 1 to each value, and if it was 1 already, carry the 1 to the next.
-    for ( size_t i = 0; i < N; ++i ) {
+    for ( size_t i = 0; i < in.size(); ++i ) {
         if ( in[i] == 0 ) {  // There will be no carry
             in[i] = 1;
             break;
