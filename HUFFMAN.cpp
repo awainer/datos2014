@@ -64,28 +64,33 @@ void Arbol::ArmarArbol(list<NodoArbol*> hojas) {
 void Arbol::insertarHoja(int c, vector<bool> code){
 	NodoArbol * nodoAux = raiz ;
 	NodoArbol * padre;
-	bool lado;
-	for(unsigned int j = 0 ; j < code.size() ; j++){
+
+	unsigned int j = 0;
+	for( ; j < code.size() -1 ; j++){
 		padre = nodoAux;
 		if (code[j] == 0){
-			nodoAux = nodoAux->izquierda();
-			lado = 0;
-		}
+			if(!nodoAux->izquierda())
+				nodoAux->setNodoIzquierda(new NodoArbol(-1,0));
+				nodoAux = nodoAux->izquierda();
+			}
 		else{
+			if(!nodoAux->derecha())
+				nodoAux->setNodoDerecha(new NodoArbol(-1,0));
 			nodoAux = nodoAux->derecha();
-			lado = 1;
-		}
+			}
 
-		if ( nodoAux == NULL && j != (code.size()-1))
+/*		if ( nodoAux == NULL && j != (code.size()-1))
 			nodoAux = new NodoArbol(-1,-1);
 		if ( nodoAux == NULL && j == (code.size()-1))
-			nodoAux = new NodoArbol(j,c);
+			nodoAux = new NodoArbol(j,c);*/
 
-		if (lado)
+	}
+	padre = nodoAux;
+	nodoAux = new NodoArbol(1,c);
+		if (code[j])
 			padre->setNodoDerecha(nodoAux);
 		else
 			padre->setNodoIzquierda(nodoAux);
-	}
 }
 
 void Arbol::deleteRecursivo(NodoArbol* node) {
@@ -236,10 +241,11 @@ void HUFFMAN::encodeTable(DataBlock* dest) {
 
 DataBlock* HUFFMAN::decompress(DataBlock* data) {
 	DataBlock * result = new DataBlock();
+
 	auto it = data->getIterator();
 	vector<Caracter> aux;
 	Caracter c;
-	for(int i=0; i<256; i++){
+	for(int i=0; i<255; i++){
 		c.c = i;
 		c.code_lenght=0;
 		if(*it > 0){
@@ -254,12 +260,21 @@ DataBlock* HUFFMAN::decompress(DataBlock* data) {
 	this->canonical(aux);
 
 	reconstruirArbol();
-
+	it++;
 	unsigned char mask;
 	NodoArbol * nodoAux = arbolHuff->root();
-	for( unsigned int i = 256; i < data->getSizeInBytes(); i++){
+	long int bitcounter=data->getSizeInBits() - 8 * 256; // le resto la tabla
+	//for( unsigned int i = 256; i < data->getSizeInBytes(); i++){
+	cerr << "bitcount inicial" << bitcounter << endl;
+	while(bitcounter>0){
+		cerr << "bitcount " << bitcounter << endl;
+		cerr << "Compressed byte: " << (int) *it << endl;
+
 		mask = 128; // 10000000 en binario
 		for(unsigned short int j=0;j<8;j++){
+			bitcounter-=1;
+			if(bitcounter < 0)
+				break;
 			if( (*it & mask) > 0){
 				nodoAux = arbolHuff->nodoDerDe(nodoAux); // era un 1
 			}
@@ -268,6 +283,7 @@ DataBlock* HUFFMAN::decompress(DataBlock* data) {
 			}
 			if (nodoAux->esHoja()){
 				result->addByte((unsigned char)nodoAux->getCode());
+				cerr << "pushout: " << (unsigned char)nodoAux->getCode() << endl;
 				nodoAux = arbolHuff->root();
 			}
 			mask = mask >> 1;
