@@ -129,7 +129,7 @@ DataBlock* HUFFMAN::Compress(DataBlock * data, int chars[256]) {
 	arbolHuff->ArmarArbol(hojas);
 	//arbolHuff->generarCodigos(&this->codigos);
 	this->generarCodigos();
-
+	delete this->arbolHuff;
 	//encode table
 	this->encodeTable(output);
 
@@ -150,7 +150,7 @@ HUFFMAN::HUFFMAN() {
 }
 
 HUFFMAN::~HUFFMAN() {
-	delete this->arbolHuff;
+	//delete this->arbolHuff;
 }
 
 
@@ -206,7 +206,7 @@ void HUFFMAN::canonical(vector<Caracter> characters) {
 		if(characters[j].code_lenght>0){
 
 			last_code=increment(last_code);
-			//cerr << last_code << endl;
+			cerr << 'j' << j << endl;
 			if(characters[j].code_lenght != lenght){
 				unsigned short int zeros_to_append=characters[j].code_lenght - lenght;
 				last_code = last_code << zeros_to_append;
@@ -245,7 +245,7 @@ DataBlock* HUFFMAN::decompress(DataBlock* data) {
 	auto it = data->getIterator();
 	vector<Caracter> aux;
 	Caracter c;
-	for(int i=0; i<255; i++){
+	for(int i=0; i<256; i++){
 		c.c = i;
 		c.code_lenght=0;
 		if(*it > 0){
@@ -260,7 +260,7 @@ DataBlock* HUFFMAN::decompress(DataBlock* data) {
 	this->canonical(aux);
 
 	reconstruirArbol();
-	it++;
+	//it++;
 	unsigned char mask;
 	NodoArbol * nodoAux = arbolHuff->root();
 	long int bitcounter=data->getSizeInBits() - 8 * 256; // le resto la tabla

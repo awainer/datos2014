@@ -138,7 +138,7 @@ TEST(AAAHUFFMANTest,TestCompressAndDecompressRandomData){
 	int	frecs[256];
 	for(int i=0;i<256;i++)
 		frecs[i]=0;
-	for(int i=0;i<2000;i++){
+	for(int i=0;i<1000;i++){
 		c = rand() % 100;
 		frecs[c]+=1;
 		orig->addByte(c);
