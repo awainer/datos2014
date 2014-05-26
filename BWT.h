@@ -18,12 +18,13 @@ private:
 	CircularList * circular_list;
 	bool nodeCompare(CircularListNode * n1, CircularListNode * n2);
 	bool checkStringsEquals(CircularListNode * n1, CircularListNode * n2);
+	bool charCompare(vector<unsigned char>::iterator it, unsigned long int pos_char1, unsigned long int pos_char2);
 
 public:
 	BWT();
 	BWT(DataBlock * original_block);
 	DataBlock * transform(DataBlock * original_block);
-//	std::string untransform(std::string cadena_ant);*/
+	DataBlock * untransform(DataBlock * cadena_ant);
 	~BWT();
 };
 
