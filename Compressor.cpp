@@ -13,6 +13,7 @@
 #include "RunLenght.h"
 #include "CompressedFileWriter.h"
 #include <iostream>
+#include "HUFFMAN.h"
 namespace std {
 
 Compressor::Compressor() {
@@ -32,7 +33,7 @@ void Compressor::compress(string file) {
 	RunLenght * rle = new RunLenght();
 	MTF * mtf = new MTF();
 	CompressedFileWriter * fw = new CompressedFileWriter(file.append(this->extension));
-
+	HUFFMAN * huffman = new HUFFMAN();
 	while(fr->hasBlocksLeft()){
 		dbIn = fr->getBlock();
 		//BWT
@@ -48,8 +49,11 @@ void Compressor::compress(string file) {
 		delete dbIn;
 		dbIn = dbOut;
 		//Huffman
-		//
-		fw->writeBlock(dbIn);
+		unsigned int * stats;
+		stats = rle->getStats();
+		dbOut = huffman->Compress(dbIn,stats);
+
+		fw->writeBlock(dbOut);
 		delete dbIn;
 	}
 	fr->close();
@@ -59,6 +63,7 @@ void Compressor::compress(string file) {
 	delete mtf;
 	delete rle;
 	delete fw;
+	delete huffman;
 }
 
 } /* namespace std */

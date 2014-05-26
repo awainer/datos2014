@@ -69,7 +69,7 @@ private:
 public:
 	HUFFMAN();
 	virtual ~HUFFMAN();
-	DataBlock* Compress(DataBlock * data, int chars[256]);
+	DataBlock* Compress(DataBlock * data, unsigned int chars[256]);
 	DataBlock* decompress(DataBlock * data);
 	void generarCodigos();
 	vector<bool> getCodigo(unsigned char c);

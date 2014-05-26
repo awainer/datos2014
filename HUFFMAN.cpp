@@ -116,7 +116,7 @@ Arbol::~Arbol() {
 	deleteRecursivo(raiz);
 }
 
-DataBlock* HUFFMAN::Compress(DataBlock * data, int chars[256]) {
+DataBlock* HUFFMAN::Compress(DataBlock * data,unsigned int chars[256]) {
 	list<NodoArbol*> hojas;
 	DataBlock * output = new DataBlock();
 
@@ -186,7 +186,7 @@ void HUFFMAN::generarCodigos() {
 void HUFFMAN::canonical(vector<Caracter> characters) {
 	/*for(int i=0;i<256;i++)
 		if (characters[i].code_lenght!=0)
-			cerr << "Canonical: " << (int)characters[i].c << " long" << characters[i].code_lenght << endl;*/
+	//		cerr << "Canonical: " << (int)characters[i].c << " long" << characters[i].code_lenght << endl;*/
 	unsigned int lenght=characters[0].code_lenght;
 	bitset<32> last_code=0;
 	vector<bool> aux_code;
@@ -201,7 +201,7 @@ void HUFFMAN::canonical(vector<Caracter> characters) {
 	for(unsigned int i=0;i<lenght;i++)
 		aux_code.push_back(0);
 	this->codigos[characters[j].c]=aux_code;
-	cerr << "Primer char con codigo " << (int)characters[j].c <<  " largo " << aux_code.size() <<  endl;
+	//cerr << "Primer char con codigo " << (int)characters[j].c <<  " largo " << aux_code.size() <<  endl;
 	j++;
 //	cerr << last_code << endl;
 	for(; j<256; j++){
@@ -209,7 +209,7 @@ void HUFFMAN::canonical(vector<Caracter> characters) {
 		if(characters[j].code_lenght>0){
 
 			last_code=increment(last_code);
-			cerr << 'j' << j << endl;
+			//cerr << 'j' << j << endl;
 			if(characters[j].code_lenght != lenght){
 				unsigned short int zeros_to_append=characters[j].code_lenght - lenght;
 				last_code = last_code << zeros_to_append;
@@ -268,10 +268,10 @@ DataBlock* HUFFMAN::decompress(DataBlock* data) {
 	NodoArbol * nodoAux = arbolHuff->root();
 	long int bitcounter=data->getSizeInBits() - 8 * 256; // le resto la tabla
 	//for( unsigned int i = 256; i < data->getSizeInBytes(); i++){
-	cerr << "bitcount inicial" << bitcounter << endl;
+	//cerr << "bitcount inicial" << bitcounter << endl;
 	while(bitcounter>0){
-		cerr << "bitcount " << bitcounter << endl;
-		cerr << "Compressed byte: " << (int) *it << endl;
+		//cerr << "bitcount " << bitcounter << endl;
+		//cerr << "Compressed byte: " << (int) *it << endl;
 
 		mask = 128; // 10000000 en binario
 		for(unsigned short int j=0;j<8;j++){
@@ -286,7 +286,7 @@ DataBlock* HUFFMAN::decompress(DataBlock* data) {
 			}
 			if (nodoAux->esHoja()){
 				result->addByte((unsigned char)nodoAux->getCode());
-				cerr << "pushout: " << (unsigned char)nodoAux->getCode() << endl;
+			//	cerr << "pushout: " << (unsigned char)nodoAux->getCode() << endl;
 				nodoAux = arbolHuff->root();
 			}
 			mask = mask >> 1;

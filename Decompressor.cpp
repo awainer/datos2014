@@ -12,6 +12,7 @@
 #include "RunLenght.h"
 #include "FileWriter.h"
 #include "CompressedFileReader.h"
+#include "HUFFMAN.h"
 namespace std {
 
 Decompressor::Decompressor() {
@@ -21,6 +22,7 @@ Decompressor::Decompressor() {
 
 void Decompressor::decompress(string file) {
 	DataBlock *dbIn,*dbOut;
+	HUFFMAN * huffman = new HUFFMAN();
 	CompressedFileReader * fr = new CompressedFileReader(file);
 	//BWT * bwt = new BWT();
 	RunLenght * rle = new RunLenght();
@@ -29,6 +31,8 @@ void Decompressor::decompress(string file) {
 	while(fr->hasBlocksLeft()){
 		dbIn = fr->getBlock();
 		// Aca va huffman
+		dbOut = huffman->decompress(dbIn);
+		dbIn=dbOut;
 		dbOut = rle->decode(dbIn);
 		delete dbIn;
 		dbIn = dbOut;

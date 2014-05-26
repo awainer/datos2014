@@ -8,7 +8,7 @@ namespace std{
 
 TEST(AAAHUFFMANTest,TestGenerarPrimerosCodigos){
 	HUFFMAN * huffman = new HUFFMAN();
-	int frecuencias[256];
+	unsigned int frecuencias[256];
 	DataBlock * sarasa = new DataBlock();
 	DataBlock * result;
 	for(int i = 0 ; i < 256 ; i++)
@@ -81,7 +81,7 @@ string vector_bool_to_string(vector<bool> b){
 TEST(AAAHUFFMANTest,TestCompressAndDecompress){
 	HUFFMAN * huffman = new HUFFMAN();
 	HUFFMAN * decompressor = new HUFFMAN();
-	int frecuencias[256];
+	unsigned int frecuencias[256];
 	DataBlock * sarasa = new DataBlock();
 	DataBlock * result;
 	DataBlock * decompressed;
@@ -135,7 +135,7 @@ TEST(AAAHUFFMANTest,TestCompressAndDecompressRandomData){
 	orig = new DataBlock();
 
 	unsigned char c;
-	int	frecs[256];
+	unsigned int	frecs[256];
 	for(int i=0;i<256;i++)
 		frecs[i]=0;
 	for(int i=0;i<1000;i++){
