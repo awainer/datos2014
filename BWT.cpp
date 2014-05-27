@@ -109,9 +109,9 @@ DataBlock * BWT::transform(DataBlock * original_block) {
 		b+=1;
 		//cerr << "ADD: " << (int)*b << endl;
 	}
-
+/*
 	// Muestro el vector salida
-	/*for (unsigned long int i = 0; i < original_block->getSizeInBytes(); i++){
+	for (unsigned long int i = 0; i < original_block->getSizeInBytes(); i++){
 		CircularListNode * current = vec[i];
 		CircularListNode * current2 = current;
 		for (unsigned long int j = 0; j < original_block->getSizeInBytes(); j++){
@@ -119,8 +119,8 @@ DataBlock * BWT::transform(DataBlock * original_block) {
 			current2=current2->getNext();
 		}
 		cerr << endl;
-	}*/
-
+	}
+*/
 	// Paso el resultado al Data Block de salida
 	for (unsigned long int i = 0; i < original_block->getSizeInBytes(); i++){
 
@@ -129,6 +129,7 @@ DataBlock * BWT::transform(DataBlock * original_block) {
 		unsigned char val = prev->getVal();
 		result_block->addByte(val);
 	}
+
 
 	return result_block;
 
@@ -155,40 +156,49 @@ DataBlock * BWT::untransform(DataBlock * cadena_ant){
 	for (unsigned long int i = 0; i < (cadena_ant->getSizeInBytes()-4); i++){
 		vec.push_back(i);
 	}
-
+/*
 	// sacar: muestro el vector
 	cerr << "vector original: ";
 	for (unsigned long int i = 0; i < (cadena_ant->getSizeInBytes()-4); i++){
 		cerr << (*(it + vec[i]));
 	}
 	cerr << endl;
-
+*/
 	//ordeno el vector de las posiciones de los chars
-	sort (vec.begin(), vec.end(),
+	stable_sort (vec.begin(), vec.end(),
 			[this, it] (unsigned long int pos_char1, unsigned long int pos_char2)
 			  {return this->charCompare(it, pos_char1,pos_char2);});
-
+/*
 	// sacar: muestro el vector
 	cerr << "vector: ";
 	for (unsigned long int i = 0; i < (cadena_ant->getSizeInBytes()-4); i++){
 		cerr << (*(it + vec[i]));
 	}
 	cerr << endl;
+*/
+/*
+		// sacar: muestro posiciones del vector
+		cerr << "posiciones vector: ";
+		for (unsigned long int i = 0; i < (cadena_ant->getSizeInBytes()-4); i++){
+			cerr << ( vec[i])<< ' ';
+		}
+		cerr << endl;
+*/
 
 	// armo la salida
 	unsigned long int indice = pos_vector;
 	it = cadena_ant->getIterator();
 	it = it+4;
-
+/*
 	cerr << "pos_vector: " << pos_vector << endl;
-
+*/
 	for (unsigned long int k = 0; k < (cadena_ant->getSizeInBytes()-4); k++){
-		cerr << "k: " << k << endl;
-		cerr << "indice: " << indice << endl;
-		cerr << "vec[indice]: " << vec[indice] << endl;
+//		cerr << "k: " << k << endl;
+//		cerr << "indice: " << indice << endl;
+//		cerr << "vec[indice]: " << vec[indice] << endl;
 		pos_vector = vec[indice];
-		cerr << "pos_vector: " << pos_vector << endl;
-		cerr << "addByte: " << (*(it + pos_vector)) << endl;
+//		cerr << "pos_vector: " << pos_vector << endl;
+//		cerr << "addByte: " << (*(it + pos_vector)) << endl;
 		cadena_orig->addByte(*(it + pos_vector));
 		indice = pos_vector;
 	}
@@ -198,7 +208,7 @@ DataBlock * BWT::untransform(DataBlock * cadena_ant){
 
 
 bool BWT::charCompare(vector<unsigned char>::iterator it, unsigned long int pos_char1, unsigned long int pos_char2){
-	if (*(it + pos_char1) >= *(it + pos_char2)){
+	if (it[pos_char1] >= it[pos_char2]){
 		return false;
 	}
 	else {

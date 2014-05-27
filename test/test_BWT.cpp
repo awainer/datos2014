@@ -62,6 +62,7 @@ TEST(BWTTEST,testSortShortBlock){
 
 }
 
+
 TEST(BWTTEST,testSortUnsortShortBlock){
 	unsigned char  initVector[] = {'C','A','A','A','X','C','H','A'};
 	uint32_t row=4;
@@ -114,8 +115,110 @@ TEST(BWTTEST,testSortUnsortShortBlock){
 	}
 	delete bwt;
 	delete orig;
+	delete result_orig;
 	delete result;
 
 }
+
+
+TEST(BWTTEST,testRandom100){
+	DataBlock * orig = new DataBlock();
+	DataBlock * result;
+	BWT * bwt = new BWT();
+
+	unsigned char r;
+	for(int i=0;i<100;i++){
+		r = rand() % 5 + 'a'; //una letra random entre a y e, como para que hay algun run
+		orig->addByte(r);
+	}
+/*
+	// SACAR: solo muestro la cadena original
+	auto itaux = orig->getIterator();
+	cerr << "cadena original: ";
+	for (unsigned int i=0; i<orig->getSizeInBytes();i++){
+		cerr << (*itaux);
+		itaux++;
+	}
+	cerr << endl;
+*/
+	result = bwt->transform(orig);
+	ASSERT_EQ(result->getSizeInBytes()-4,orig->getSizeInBytes());
+	auto it = result->getIterator();
+
+	// Unsort
+	DataBlock * result_orig;
+	result_orig = bwt->untransform(result);
+	ASSERT_EQ(result_orig->getSizeInBytes(),orig->getSizeInBytes());
+
+	auto it_orig = orig->getIterator();
+	auto it_result = result_orig->getIterator();
+/*
+	cerr << "voy descomprimiendo esta cosa: ";
+	for (unsigned int i=0; i<orig->getSizeInBytes();i++){
+		ASSERT_EQ(*it_orig,*it_result);
+		cerr << (*it_result);
+		it_orig++;
+		it_result++;
+	}
+	cerr << endl;
+*/
+
+	delete bwt;
+	delete orig;
+	delete result_orig;
+	delete result;
+
+}
+
+
+TEST(BWTTEST,testRandomBiGGG){
+	DataBlock * orig = new DataBlock();
+	DataBlock * result;
+	BWT * bwt = new BWT();
+
+	unsigned char r;
+	for(int i=0;i<10000;i++){
+		r = rand() % 5 + 'a'; //una letra random entre a y e, como para que hay algun run
+		orig->addByte(r);
+	}
+/*
+	// SACAR: solo muestro la cadena original
+	auto itaux = orig->getIterator();
+	cerr << "cadena original: ";
+	for (unsigned int i=0; i<orig->getSizeInBytes();i++){
+		cerr << (*itaux);
+		itaux++;
+	}
+	cerr << endl;
+*/
+	result = bwt->transform(orig);
+	ASSERT_EQ(result->getSizeInBytes()-4,orig->getSizeInBytes());
+	auto it = result->getIterator();
+
+	// Unsort
+	DataBlock * result_orig;
+	result_orig = bwt->untransform(result);
+	ASSERT_EQ(result_orig->getSizeInBytes(),orig->getSizeInBytes());
+
+	auto it_orig = orig->getIterator();
+	auto it_result = result_orig->getIterator();
+/*
+	cerr << "voy descomprimiendo esta cosa: ";
+	for (unsigned int i=0; i<orig->getSizeInBytes();i++){
+		ASSERT_EQ(*it_orig,*it_result);
+		cerr << (*it_result);
+		it_orig++;
+		it_result++;
+	}
+	cerr << endl;
+*/
+
+	delete bwt;
+	delete orig;
+	delete result_orig;
+	delete result;
+
+}
+
 
 }
