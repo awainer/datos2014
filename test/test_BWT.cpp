@@ -13,8 +13,6 @@ namespace std{
 
 TEST(BWTTEST,testSortShortBlock){
 	unsigned char  initVector[] = {'C','A','A','A','X','C','H','A'};
-	uint32_t row=4;
-	//unsigned char  expectedResultVector[] = {'C','A','H','A','A','X','C','A'};
 
 	unsigned char  expectedResultVector[] = {'C','A','H','A','A','X','C','A'};
 	/**
@@ -65,7 +63,7 @@ TEST(BWTTEST,testSortShortBlock){
 
 TEST(BWTTEST,testSortUnsortShortBlock){
 	unsigned char  initVector[] = {'C','A','A','A','X','C','H','A'};
-	uint32_t row=4;
+
 	//unsigned char  expectedResultVector[] = {'C','A','H','A','A','X','C','A'};
 
 	unsigned char  expectedResultVector[] = {'C','A','H','A','A','X','C','A'};
@@ -143,16 +141,16 @@ TEST(BWTTEST,testRandom100){
 */
 	result = bwt->transform(orig);
 	ASSERT_EQ(result->getSizeInBytes()-4,orig->getSizeInBytes());
-	auto it = result->getIterator();
+	//auto it = result->getIterator();
 
 	// Unsort
 	DataBlock * result_orig;
 	result_orig = bwt->untransform(result);
 	ASSERT_EQ(result_orig->getSizeInBytes(),orig->getSizeInBytes());
 
-	auto it_orig = orig->getIterator();
+/*	auto it_orig = orig->getIterator();
 	auto it_result = result_orig->getIterator();
-/*
+
 	cerr << "voy descomprimiendo esta cosa: ";
 	for (unsigned int i=0; i<orig->getSizeInBytes();i++){
 		ASSERT_EQ(*it_orig,*it_result);
@@ -193,15 +191,15 @@ TEST(BWTTEST,testRandomBiGGG){
 */
 	result = bwt->transform(orig);
 	ASSERT_EQ(result->getSizeInBytes()-4,orig->getSizeInBytes());
-	auto it = result->getIterator();
+//	auto it = result->getIterator();
 
 	// Unsort
 	DataBlock * result_orig;
 	result_orig = bwt->untransform(result);
 	ASSERT_EQ(result_orig->getSizeInBytes(),orig->getSizeInBytes());
 
-	auto it_orig = orig->getIterator();
-	auto it_result = result_orig->getIterator();
+//	auto it_orig = orig->getIterator();
+//	auto it_result = result_orig->getIterator();
 /*
 	cerr << "voy descomprimiendo esta cosa: ";
 	for (unsigned int i=0; i<orig->getSizeInBytes();i++){

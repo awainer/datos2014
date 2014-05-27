@@ -24,7 +24,7 @@ void Decompressor::decompress(string file) {
 	DataBlock *dbIn,*dbOut;
 	HUFFMAN * huffman = new HUFFMAN();
 	CompressedFileReader * fr = new CompressedFileReader(file);
-	//BWT * bwt = new BWT();
+	BWT * bwt = new BWT();
 	RunLenght * rle = new RunLenght();
 	MTF * mtf = new MTF();
 	FileWriter * fw = new FileWriter(this->removeExtension(file));
@@ -40,6 +40,8 @@ void Decompressor::decompress(string file) {
 		dbOut = mtf->decode(dbIn);
 		delete dbIn;
 		// Aca va BWT
+		dbIn=dbOut;
+		dbOut=bwt->untransform(dbIn);
 		fw->writeBlock(dbOut);
 		delete dbOut;
 	}

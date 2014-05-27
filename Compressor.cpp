@@ -29,7 +29,7 @@ void Compressor::compress(string file) {
 
 	DataBlock *dbIn,*dbOut;
 	FileReader * fr = new FileReader(file);
-	//BWT * bwt = new BWT();
+	BWT * bwt = new BWT();
 	RunLenght * rle = new RunLenght();
 	MTF * mtf = new MTF();
 	CompressedFileWriter * fw = new CompressedFileWriter(file.append(this->extension));
@@ -37,9 +37,9 @@ void Compressor::compress(string file) {
 	while(fr->hasBlocksLeft()){
 		dbIn = fr->getBlock();
 		//BWT
-		//dbOut = bwt->encode(dbIn);
-		//delete dbIn;
-		//dbIn = dbOut;
+		dbOut = bwt->transform(dbIn);
+		delete dbIn;
+		dbIn = dbOut;
 		//MTF
 		dbOut = mtf->encode(dbIn);
 		delete dbIn;
@@ -61,7 +61,7 @@ void Compressor::compress(string file) {
 	fr->close();
 	fw->close();
 	delete fr;
-	//delete bwt;
+	delete bwt;
 	delete mtf;
 	delete rle;
 	delete fw;

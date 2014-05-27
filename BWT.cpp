@@ -16,7 +16,7 @@
 namespace std{
 
 BWT::BWT() {
-	this->circular_list = new CircularList();
+	this->circular_list = NULL;
 }
 
 
@@ -61,6 +61,7 @@ bool BWT::checkStringsEquals(CircularListNode * n1, CircularListNode * n2){
 
 DataBlock * BWT::transform(DataBlock * original_block) {
 	DataBlock * result_block = new DataBlock();
+	this->circular_list = new CircularList();
 	unsigned char un_char;
 	uint32_t row=0;
 
@@ -130,7 +131,7 @@ DataBlock * BWT::transform(DataBlock * original_block) {
 		result_block->addByte(val);
 	}
 
-
+	delete this->circular_list;
 	return result_block;
 
 }
@@ -138,6 +139,7 @@ DataBlock * BWT::transform(DataBlock * original_block) {
 
 DataBlock * BWT::untransform(DataBlock * cadena_ant){
 	DataBlock * cadena_orig = new DataBlock();
+	this->circular_list = new CircularList();
 	vector<unsigned long int> vec;
 	uint32_t pos_vector=0;
 
@@ -203,6 +205,7 @@ DataBlock * BWT::untransform(DataBlock * cadena_ant){
 		indice = pos_vector;
 	}
 
+	delete this->circular_list;
 	return cadena_orig;
 }
 
@@ -218,7 +221,7 @@ bool BWT::charCompare(vector<unsigned char>::iterator it, unsigned long int pos_
 
 
 BWT::~BWT() {
-	delete this->circular_list;
+	//delete this->circular_list;
 }
 
 }
