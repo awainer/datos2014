@@ -30,7 +30,7 @@ public:
 private:
 	char escape;
 	unsigned int stats[256];
-	Run getRun(vector<unsigned char >::iterator, unsigned long int);
+	Run getRun(vector<unsigned char >::iterator, unsigned long int, unsigned long int maxpos);
 	void encodeRun(DataBlock * dst, Run r);
 	void decodeRun(DataBlock * dst, Run r);
 	void resetStats();

@@ -55,7 +55,7 @@ DataBlock* RunLenght::encode(DataBlock* src) {
 			this->stats[it[i]]+=2;
 			i+=1;
 		}else{
-			run = this->getRun(it,i);
+			run = this->getRun(it,i, src->getSizeInBytes());
 			if(run.count > 3){
 				this->encodeRun(db,run);
 				//cerr << "run at: " << i << " size: " << run.count << endl;
@@ -103,13 +103,14 @@ DataBlock* RunLenght::decode(DataBlock* src) {
 }
 
 Run RunLenght::getRun(vector<unsigned char>::iterator it,
-		unsigned long int position) {
+		unsigned long int position,
+		unsigned long int maxpos) {
 	unsigned short int count = 1;
 	Run run = Run();
 	run.symbol = it[position];
 	position+=1;
 
-	while((run.symbol == it[position]) && (count < 259)){
+	while((run.symbol == it[position]) && (count < 259) && position < maxpos){
  		position+=1;
 		count+=1;
 	}
