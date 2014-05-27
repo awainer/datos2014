@@ -117,6 +117,7 @@ Arbol::~Arbol() {
 }
 
 DataBlock* HUFFMAN::Compress(DataBlock * data,unsigned int chars[256]) {
+	this->arbolHuff = new Arbol();
 	list<NodoArbol*> hojas;
 	DataBlock * output = new DataBlock();
 
@@ -132,7 +133,7 @@ DataBlock* HUFFMAN::Compress(DataBlock * data,unsigned int chars[256]) {
 
 	//arbolHuff->generarCodigos(&this->codigos);
 	this->generarCodigos();
-	//delete this->arbolHuff;
+	delete this->arbolHuff;
 	//encode table
 	this->encodeTable(output);
 
@@ -149,11 +150,11 @@ DataBlock* HUFFMAN::Compress(DataBlock * data,unsigned int chars[256]) {
 }
 
 HUFFMAN::HUFFMAN() {
-	arbolHuff = new Arbol();
+	this->arbolHuff = NULL;
 }
 
 HUFFMAN::~HUFFMAN() {
-	delete this->arbolHuff;
+	//delete this->arbolHuff;
 }
 
 
@@ -243,6 +244,7 @@ void HUFFMAN::encodeTable(DataBlock* dest) {
 }
 
 DataBlock* HUFFMAN::decompress(DataBlock* data) {
+	this->arbolHuff = new Arbol();
 	DataBlock * result = new DataBlock();
 
 	auto it = data->getIterator();
@@ -294,7 +296,7 @@ DataBlock* HUFFMAN::decompress(DataBlock* data) {
 		it++;
 	}
 
-
+	delete this->arbolHuff;
 	return result;
 }
 

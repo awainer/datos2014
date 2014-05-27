@@ -32,6 +32,7 @@ void Decompressor::decompress(string file) {
 		dbIn = fr->getBlock();
 		// Aca va huffman
 		dbOut = huffman->decompress(dbIn);
+		delete dbIn;
 		dbIn=dbOut;
 		dbOut = rle->decode(dbIn);
 		delete dbIn;
@@ -44,6 +45,7 @@ void Decompressor::decompress(string file) {
 	}
 	fr->close();
 	fw->close();
+	delete huffman;
 	delete rle;
 	delete mtf;
 	delete fw;

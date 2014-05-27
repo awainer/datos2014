@@ -53,7 +53,9 @@ void Compressor::compress(string file) {
 		stats = rle->getStats();
 		dbOut = huffman->Compress(dbIn,stats);
 
+
 		fw->writeBlock(dbOut);
+		delete dbOut;
 		delete dbIn;
 	}
 	fr->close();

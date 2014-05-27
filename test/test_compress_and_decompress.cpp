@@ -16,7 +16,7 @@ TEST(testIntegracionCompressor,CompressAndDecompress){
 	ofstream fs;
 	string path="/tmp/lagarola.txt";
 	string path_cmp="/tmp/lagarola.txt.cmp";
-	int buffsize=20000000;
+	int buffsize=1000000;
 	fs.open(path.c_str(), ios::out | ios::binary);
 	string  buffer;
 

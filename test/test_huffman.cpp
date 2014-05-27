@@ -131,6 +131,7 @@ TEST(AAAHUFFMANTest,TestCompressAndDecompress){
 TEST(AAAHUFFMANTest,TestCompressAndDecompressRandomData){
 
 	HUFFMAN * huffman1 = new HUFFMAN();
+	HUFFMAN * huffman2 = new HUFFMAN();
 	DataBlock * orig, * compressed, *decompressed;
 	orig = new DataBlock();
 
@@ -145,7 +146,7 @@ TEST(AAAHUFFMANTest,TestCompressAndDecompressRandomData){
 	}
 
 	compressed = huffman1->Compress(orig,frecs);
-	decompressed = huffman1->decompress(compressed);
+	decompressed = huffman2->decompress(compressed);
 
 	ASSERT_EQ(orig->getSizeInBytes(),decompressed->getSizeInBytes());
 	auto it1 = orig->getIterator();
@@ -156,6 +157,7 @@ TEST(AAAHUFFMANTest,TestCompressAndDecompressRandomData){
 	}
 	delete orig;
 	delete huffman1;
+	delete huffman2;
 	delete compressed;
 	delete decompressed;
 }
