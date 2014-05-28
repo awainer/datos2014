@@ -79,7 +79,7 @@ unsigned long long int FileReader::determineBlockSize(unsigned long long int fil
 		if (fileSize < sizes[i])
 			result = sizes[i+1];
 	}
-	//cerr << "DEBUG: determined block size: " << result << endl;
+	cerr << "DEBUG: determined block size: " << result << endl;
 	return result;
 
 }

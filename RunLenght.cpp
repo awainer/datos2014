@@ -87,6 +87,7 @@ DataBlock* RunLenght::decode(DataBlock* src) {
 			// Escape literal escapado (doble escape)
 			if(it[i] == this->escape){
 				db->addByte(this->escape);
+				i++;
 			}else{ //Un run!
 				r.symbol = it[i];
 				i++;
@@ -109,6 +110,11 @@ Run RunLenght::getRun(vector<unsigned char>::iterator it,
 	Run run = Run();
 	run.symbol = it[position];
 	position+=1;
+
+	if (run.symbol == this->escape){
+		run.count=1;
+		return run;
+	}
 
 	while((run.symbol == it[position]) && (count < 259) && position < maxpos){
  		position+=1;

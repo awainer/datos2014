@@ -63,7 +63,7 @@ TEST(MTFTest, unchar) {
 	delete r;
 }
 
-TEST(MTFTest, fullcycle) {
+TEST(MTFTest, fullcyclerandom) {
 	MTF * miTrans = new MTF();
 	unsigned char  originit[] = {87, 71, 192, 112, 177, 122, 215, 125, 148, 202, 95, 42, 2, 83, 24, 57, 217, 165, 164,
 			127, 175, 105, 18, 189, 181, 95, 150, 39, 54, 212, 67, 101, 53, 161, 159, 162, 68, 166,
@@ -76,10 +76,17 @@ TEST(MTFTest, fullcycle) {
 	DataBlock * r;
 	DataBlock * s;
 	DataBlock * orig = new DataBlock();
+
 	vector<unsigned char>::iterator it1,it2;
 
-	for(unsigned int i=0;i<sizeof(originit);i++)
-		orig->addByte(originit[i]);
+	unsigned char w;
+	for(int i=0;i<50000;i++){
+		w = rand() % 256; //una letra random entre a y e, como para que hay algun run
+		orig->addByte (w);
+	}
+
+	/*for(unsigned int i=0;i<sizeof(originit);i++)
+		orig->addByte(originit[i]);*/
 	r = miTrans->encode(orig);
 	s = miTrans->decode(r);
 	it1 = orig->getIterator();

@@ -7,17 +7,20 @@
 
 #ifndef BWT_H
 #define BWT_H
-#include "CircularList.h"
+//#include "CircularList.h"
 #include "DataBlock.h"
 
 namespace std{
 
 class BWT {
 private:
-	char * vector_punteros [];
-	CircularList * circular_list;
-	bool nodeCompare(CircularListNode * n1, CircularListNode * n2);
-	bool checkStringsEquals(CircularListNode * n1, CircularListNode * n2);
+	//char * vector_punteros [];
+	//CircularList * circular_list;
+	//uint32_t pos_string_orig;
+	vector<unsigned char> vector_datos;
+//	bool nodeCompare(CircularListNode * n1, CircularListNode * n2);
+	bool nodeCompare(unsigned long int n1, unsigned long int n2);
+	//bool checkStringsEquals(CircularListNode * n1, CircularListNode * n2);
 	bool charCompare(vector<unsigned char>::iterator it, unsigned long int pos_char1, unsigned long int pos_char2);
 
 public:

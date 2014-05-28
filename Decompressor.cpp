@@ -34,9 +34,9 @@ void Decompressor::decompress(string file) {
 		dbOut = huffman->decompress(dbIn);
 		delete dbIn;
 		dbIn=dbOut;
-		dbOut = rle->decode(dbIn);
-		delete dbIn;
-		dbIn = dbOut;
+		//dbOut = rle->decode(dbIn);
+		//delete dbIn;
+		//dbIn = dbOut;
 		dbOut = mtf->decode(dbIn);
 		delete dbIn;
 		// Aca va BWT

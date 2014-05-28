@@ -48,7 +48,7 @@ TEST(BWTTEST,testSortShortBlock){
 //	for (unsigned int i=0; i<4;i++)
 //			cerr << "LALA" << (int)it[i] << endl;
 
-	it = result->getIterator();
+//	it = result->getIterator();
 	// Verifico el número de columna original
 /*	for(int i=0;i<4;i++)
 		ASSERT_EQ(it[i],*((char *) (i +&row)));*/
@@ -125,8 +125,8 @@ TEST(BWTTEST,testRandom100){
 	BWT * bwt = new BWT();
 
 	unsigned char r;
-	for(int i=0;i<100;i++){
-		r = rand() % 5 + 'a'; //una letra random entre a y e, como para que hay algun run
+	for(int i=0;i<20;i++){
+		r = rand() % 256; //una letra random entre a y e, como para que hay algun run
 		orig->addByte(r);
 	}
 /*
@@ -175,8 +175,8 @@ TEST(BWTTEST,testRandomBiGGG){
 	BWT * bwt = new BWT();
 
 	unsigned char r;
-	for(int i=0;i<10000;i++){
-		r = rand() % 5 + 'a'; //una letra random entre a y e, como para que hay algun run
+	for(int i=0;i<50000;i++){
+		r = rand() % 256; //una letra random entre a y e, como para que hay algun run
 		orig->addByte(r);
 	}
 /*

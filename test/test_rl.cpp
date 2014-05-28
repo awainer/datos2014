@@ -11,6 +11,32 @@
 
 namespace std{
 
+TEST(TestRLE, MuchosEscapes){
+	//unsigned int *  stats;
+	DataBlock * db = new DataBlock();
+	DataBlock * result;
+	DataBlock *decoded;
+	RunLenght * encoder = new RunLenght();
+	for (unsigned int i=0; i<5 ; i++)
+		db->addByte(encoder->getEscapeChar());
+
+	// Un match demasiado largo se debe representar como
+	// varios matches.
+	// 900 = 260 + 260 + 260 + 120 (offset -4)
+	result = encoder->encode(db);
+	//stats = encoder->getStats();
+
+	//vector<unsigned char>::iterator it = result->getIterator();
+//	for(int i=0;i<result->getSizeInBytes(); i++)
+//		cerr << it[i] << " " << (int) it[i] << endl;
+	decoded = encoder->decode(result);
+	ASSERT_EQ(result->getSizeInBytes(),10);
+	ASSERT_EQ(db->getSizeInBytes(),decoded->getSizeInBytes());
+	delete db;
+	delete result;
+	delete encoder;
+}
+
 TEST(TestRLE, TestEncode){
 	//unsigned char data[] = { 23,23,23,22,23,23,12,76,25,25,25,25,255,25,34,255,255,16 };
 	unsigned char data[] = "ABBBCAAAADEFDFKJ";
@@ -83,7 +109,7 @@ TEST(TestRLE, MatchDemasiadoLargo){
 	DataBlock * db = new DataBlock();
 	DataBlock * result;
 	RunLenght * encoder = new RunLenght();
-	for (unsigned int i=0; i<900 ; i++)
+	for (unsigned int i=0; i<900; i++)
 		db->addByte('X');
 
 	// Un match demasiado largo se debe representar como
@@ -105,6 +131,10 @@ TEST(TestRLE, MatchDemasiadoLargo){
 	delete encoder;
 }
 
+
+
+
+
 TEST(TestRLE, encodeAndDecode){
 
 	DataBlock * orig = new DataBlock();
@@ -112,17 +142,22 @@ TEST(TestRLE, encodeAndDecode){
 	RunLenght * encoder = new RunLenght();
 	vector<unsigned char>::iterator it1,it2;
 	unsigned char r;
-	for(int i=0;i<5000;i++){
-		r = rand() % 5 + 'a'; //una letra random entre a y e, como para que hay algun run
-		orig->addByte(r);
+	cerr << "AAAAAAAA" << endl;
+	for(int i=0;i<50000;i++){
+		//r = rand() % 256; //una letra random entre a y e, como para que hay algun run
+		orig->addByte(rand() %256);
 	}
+	cerr << "SDSDSDS" << endl;
 	encoded = encoder->encode(orig);
-	ASSERT_LT(encoded->getSizeInBytes(),orig->getSizeInBytes());
+	//auto it = encoded->getIterator();
+	//for(unsigned int i=0; i<encoded->getSizeInBytes();i++)
+		//cerr << "RLE " << (int)it[i] <<endl;
+		//ASSERT_LT(encoded->getSizeInBytes(),orig->getSizeInBytes());
 	decoded = encoder->decode(encoded);
 	it1 = orig->getIterator();
 	it2 = decoded->getIterator();
 	ASSERT_EQ(decoded->getSizeInBytes(),orig->getSizeInBytes());
-	for(int i=0; i<5000 ;i++)
+	for(int i=0; i<decoded->getSizeInBytes() ;i++)
 		ASSERT_EQ(it1[i],it2[i]);
 	delete encoded;
 	delete encoder;

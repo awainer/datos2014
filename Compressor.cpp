@@ -45,12 +45,17 @@ void Compressor::compress(string file) {
 		delete dbIn;
 		dbIn = dbOut;
 		//RLE
-		dbOut = rle->encode(dbOut);
-		delete dbIn;
-		dbIn = dbOut;
+		//dbOut = rle->encode(dbOut);
+		//delete dbIn;
+		//dbIn = dbOut;
 		//Huffman
-		unsigned int * stats;
-		stats = rle->getStats();
+		unsigned int  stats[256];
+		auto it = dbIn->getIterator();
+		for(unsigned int i=0; i< dbIn->getSizeInBytes();i++)
+			stats[it[i]]=0;
+		for(unsigned int i=0; i< dbIn->getSizeInBytes();i++)
+			stats[it[i]]+=1;
+		//stats = rle->getStats();
 		dbOut = huffman->Compress(dbIn,stats);
 
 
