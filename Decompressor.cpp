@@ -44,11 +44,13 @@ void Decompressor::decompress(string file) {
 		dbOut=bwt->untransform(dbIn);
 		fw->writeBlock(dbOut);
 		delete dbOut;
+		delete dbIn;
 	}
 	fr->close();
 	fw->close();
 	delete huffman;
 	delete rle;
+	delete bwt;
 	delete mtf;
 	delete fw;
 	delete fr;
