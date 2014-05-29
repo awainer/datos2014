@@ -61,12 +61,14 @@ unsigned long long int FileReader::determineBlockSize(unsigned long long int fil
 	 *  128K    < 512K
 	 *  4M      < 16M
 	 *  64M     < 256M
-	 *  512M    < 1G
+	 *  128M    < 1G
 	 *
 	 *  Atencion! el codigo que viene a continuacion es muy feo. Yo avise.
 	 */
+
+
 	vector<unsigned long int> sizes = {
-			1024*1024*1024,  1024*1024*512,
+			1024*1024*1024,  1024*1024*128,
 			1024*1024*256,   1024*1024*64,
 			1024*1024*16,    1024*1024*4,
 			1024*512,        1024*128,
