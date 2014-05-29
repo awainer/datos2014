@@ -16,7 +16,7 @@ TEST(testIntegracionCompressor,CompressAndDecompress){
 	ofstream fs;
 	string path="/tmp/lagarola.txt";
 	string path_cmp="/tmp/lagarola.txt.cmp";
-	int buffsize=15000;
+	int buffsize=500000;
 	fs.open(path.c_str(), ios::out | ios::binary);
 	string  buffer;
 
@@ -49,7 +49,7 @@ TEST(testIntegracionCompressor,CompressAndDecompress){
 
 	for (unsigned int i=0; i<buffer.size(); i++){
 	//	cerr << (int)buffer->c_str()[i] << " " <<  (int)buffer2.c_str()[i] << endl;
-		cerr << "cmp " << i << endl;
+		//cerr << "cmp " << i << endl;
 		ASSERT_EQ(buffer.c_str()[i],buffer2.c_str()[i]);
 	}
 

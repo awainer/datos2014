@@ -9,6 +9,7 @@
 #include "DataBlock.h"
 #include "BWT.h"
 #include "MTF.h"
+#include <iostream>
 #include "RunLenght.h"
 #include "FileWriter.h"
 #include "CompressedFileReader.h"
@@ -29,18 +30,23 @@ void Decompressor::decompress(string file) {
 	MTF * mtf = new MTF();
 	FileWriter * fw = new FileWriter(this->removeExtension(file));
 	while(fr->hasBlocksLeft()){
+		cerr << "Leo un bloque" << endl;
 		dbIn = fr->getBlock();
 		// Aca va huffman
+		cerr << "HUff" << endl;
 		dbOut = huffman->decompress(dbIn);
 		delete dbIn;
 		dbIn=dbOut;
-		//dbOut = rle->decode(dbIn);
-		//delete dbIn;
-		//dbIn = dbOut;
+		cerr << "RLE" << endl;
+		dbOut = rle->decode(dbIn);
+		delete dbIn;
+		dbIn = dbOut;
+		cerr << "MTF" << endl;
 		dbOut = mtf->decode(dbIn);
 		delete dbIn;
 		// Aca va BWT
 		dbIn=dbOut;
+		cerr << "BWT" << endl;
 		dbOut=bwt->untransform(dbIn);
 		fw->writeBlock(dbOut);
 		delete dbOut;

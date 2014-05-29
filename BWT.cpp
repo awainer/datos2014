@@ -22,26 +22,7 @@ BWT::BWT() {
 
 //bool BWT::nodeCompare(CircularListNode * n1, CircularListNode * n2){
 bool BWT::nodeCompare(unsigned long int n1, unsigned long int n2){
-	// True si n1 precede a n2, segun la referencia.
-	// Para no modificar los parametros
-/*	bool cambio_pos_string_orig_n1 = false;
-	bool cambio_pos_string_orig_n2 = false;
-	unsigned long int pos_orig_n1;
-	unsigned long int pos_orig_n2;
-	if (n1 == this->pos_string_orig){
-		cambio_pos_string_orig_n1 = true;
-		pos_orig_n1 = n1;
-	}
-	else{
-		if (n1 == this->pos_string_orig){
-			cambio_pos_string_orig_n2 = true;
-			pos_orig_n2 = n2;
-		}
-	}
-*/
-	//CircularListNode * node1 = n1;
-	//CircularListNode * node2 = n2;
-	//unsigned long int n = this->circular_list->getQuantityNodes();
+
 	unsigned long int n = this->vector_datos.size();
 	unsigned long int tamanio_vector = n;
 	do{
@@ -65,24 +46,6 @@ bool BWT::nodeCompare(unsigned long int n1, unsigned long int n2){
 	return false; // son iguales
 }
 
-/*
-bool BWT::checkStringsEquals(CircularListNode * n1, CircularListNode * n2){
-	CircularListNode * node1 = n1;
-	CircularListNode * node2 = n2;
-	unsigned long int n = this->circular_list->getQuantityNodes();
-	do{
-		if(node1->getVal() < node2->getVal())
-			return false;
-		if(node1->getVal() > node2->getVal())
-			return false;
-		//son iguales, me fijo en el siguiente
-		node1 = node1->getNext();
-		node2 = node2->getNext();
-		n--;
-	}while(n>0);
-
-	return true; //o true, es lo mismo, son iguales
-}*/
 
 
 DataBlock * BWT::transform(DataBlock * original_block) {
@@ -106,9 +69,7 @@ DataBlock * BWT::transform(DataBlock * original_block) {
 	//this->pos_string_orig = 0;
 
 	// Armo el vector de iteradoes a ordenar
-	//unsigned long int cant_chars = this->circular_list->getQuantityNodes();
-	//vector<list<CircularListNode *>::iterator> un_vector();
-	//vector<CircularListNode *> vec;
+
 	vector<unsigned long int> vec;
 
 //	cerr<< "vector de posiciones original: ";
@@ -158,6 +119,7 @@ DataBlock * BWT::transform(DataBlock * original_block) {
 			row = i;
 			end_of_cycle = true;
 		}*/
+		this->vector_datos.clear();
 	}
 
 //	cerr <<"row: "<< row << endl;

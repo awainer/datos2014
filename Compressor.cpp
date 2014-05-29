@@ -35,30 +35,28 @@ void Compressor::compress(string file) {
 	CompressedFileWriter * fw = new CompressedFileWriter(file.append(this->extension));
 	HUFFMAN * huffman = new HUFFMAN();
 	while(fr->hasBlocksLeft()){
+		cerr << "Leo un bloque" << endl;
 		dbIn = fr->getBlock();
 		//BWT
+		cerr << "BWT" << endl;
 		dbOut = bwt->transform(dbIn);
 		delete dbIn;
 		dbIn = dbOut;
+		cerr << "MTF" << endl;
 		//MTF
 		dbOut = mtf->encode(dbIn);
 		delete dbIn;
 		dbIn = dbOut;
+		cerr << "RLE" << endl;
 		//RLE
-		//dbOut = rle->encode(dbOut);
-		//delete dbIn;
-		//dbIn = dbOut;
+		dbOut = rle->encode(dbOut);
+		delete dbIn;
+		dbIn = dbOut;
+		cerr << "HUff" << endl;
 		//Huffman
-		unsigned int  stats[256];
-		auto it = dbIn->getIterator();
-		for(unsigned int i=0; i< dbIn->getSizeInBytes();i++)
-			stats[it[i]]=0;
-		for(unsigned int i=0; i< dbIn->getSizeInBytes();i++)
-			stats[it[i]]+=1;
-		//stats = rle->getStats();
+		unsigned int * stats;
+		stats = rle->getStats();
 		dbOut = huffman->Compress(dbIn,stats);
-
-
 		fw->writeBlock(dbOut);
 		delete dbOut;
 		delete dbIn;

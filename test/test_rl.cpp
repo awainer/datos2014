@@ -35,6 +35,7 @@ TEST(TestRLE, MuchosEscapes){
 	delete db;
 	delete result;
 	delete encoder;
+	delete decoded;
 }
 
 TEST(TestRLE, TestEncode){
