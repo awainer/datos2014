@@ -17,7 +17,7 @@
 namespace std {
 
 Compressor::Compressor() {
-	this->extension = ".cmp";
+	this->extension = ".3";
 
 }
 
