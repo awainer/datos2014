@@ -60,21 +60,21 @@ unsigned long long int FileReader::determineBlockSize(unsigned long long int fil
 	 *  16K     < 128K
 	 *  128K    < 512K
 	 *  4M      < 16M
-	 *  64M     < 256M
-	 *  128M    < 1G
+	 *  8M     < 256M
+	 *  32M    < 1G
 	 *
 	 *  Atencion! el codigo que viene a continuacion es muy feo. Yo avise.
 	 */
 
 
 	vector<unsigned long int> sizes = {
-			1024*1024*1024,  1024*1024*128,
-			1024*1024*256,   1024*1024*64,
+			1024*1024*1024,  1024*1024*32,
+			1024*1024*256,   1024*1024*8,
 			1024*1024*16,    1024*1024*4,
 			1024*512,        1024*128,
 			1024*128,        1024*16
 			};
-	unsigned long long int result;
+	unsigned long long int result=0;
 	//Ineficente? Si! Son 4 iteraciones por archivo....
 	for(unsigned int i=0;i<sizes.size(); i+=2){
 		//cerr << " z " << sizeof(sizes) << "fs: " << fileSize << "  i: " << i << " sizes[i] " << sizes[i] << endl;
