@@ -69,8 +69,8 @@ Decompressor::~Decompressor() {
 }
 
 string Decompressor::removeExtension(string path) {
-	if(path.compare(path.size()-5, 4, this->extension, 0,4)){
-		path.resize(path.size()-4);
+	if(path.compare(path.size()-this->extension.size(), this->extension.size(), this->extension, 0,this->extension.size())){
+		path.resize(path.size()-2);
 		return path;
 	}else
 		throw "Extensión equivocada";
